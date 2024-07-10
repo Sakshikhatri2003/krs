@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32804.467
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRS Academy", "KRS Academy\KRS Academy.csproj", "{DFC2897E-94A3-4E01-A293-C3BAEFF08441}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DFC2897E-94A3-4E01-A293-C3BAEFF08441}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFC2897E-94A3-4E01-A293-C3BAEFF08441}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFC2897E-94A3-4E01-A293-C3BAEFF08441}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFC2897E-94A3-4E01-A293-C3BAEFF08441}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0329F110-12CA-4F59-9B95-A4DB83CB10E0}
+	EndGlobalSection
+EndGlobal
