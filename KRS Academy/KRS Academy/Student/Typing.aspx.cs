@@ -32,7 +32,7 @@ namespace KRS_Academy.Student
                 int typingId = Convert.ToInt32(e.CommandArgument);
                 hfTypingId.Value = typingId.ToString();
 
-                Response.Redirect("TypingStart.aspx?Id=" + hfTypingId.Value);
+                Response.Redirect("~/TypingStart.aspx?Id=" + hfTypingId.Value);
             }
         }
 

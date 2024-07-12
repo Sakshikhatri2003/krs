@@ -53,7 +53,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="starter.html" class="nav-link">Home</a>
+                    <a href="Dashboard.aspx" class="nav-link">Home</a>
                 </li>
             </ul>
 
@@ -80,36 +80,18 @@
                         </form>
                     </div>
                 </li>
-
-                <!-- Messages Dropdown Menu -->
-
-                <!-- Notifications Dropdown Menu -->
-
-
-
             </ul>
         </nav>
-        <!-- /.navbar -->
-
-        <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <!-- Brand Logo -->
-
-
-            <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                        <img src="../images/logo1.png" class="img-circle elevation-2" style="background-color:white;" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="profile.html" class="d-block">Alexander Pierce</a>
+                        <a href="Dashboard.aspx" style="font-size:larger;" class="d-block">KRS ACADEMY</a>
                     </div>
                 </div>
-
-
-                <!-- SidebarSearch Form -->
                 <div class="form-inline">
                     <div class="input-group" data-widget="sidebar-search">
                         <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
@@ -125,7 +107,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="#" class="nav-link ">
+                            <a href="Dashboard.aspx" class="nav-link ">
                                 <img src="images/home.png" alt="" style="height: 20px;" class="icon">
                                 <p>
                                     &nbsp;&nbsp; Home

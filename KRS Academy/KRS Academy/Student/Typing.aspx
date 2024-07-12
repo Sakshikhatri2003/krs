@@ -27,7 +27,7 @@
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Date" HeaderStyle-CssClass="table-dark">
                         <ItemTemplate>
-                            <%# Eval("Date") %>
+                            <%# Convert.ToDateTime(Eval("Date")).ToString("dd-MMM-yyyy") %>
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Language" HeaderStyle-CssClass="table-dark">
