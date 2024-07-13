@@ -4069,6 +4069,8 @@
     <Content Include="Student\plugins\bootstrap-switch\css\bootstrap3\bootstrap-switch.min.css" />
     <Content Include="Student\plugins\bootstrap-switch\js\bootstrap-switch.js" />
     <Content Include="Student\plugins\bootstrap-switch\js\bootstrap-switch.min.js" />
+    <Content Include="Student\plugins\bootstrap.min.css" />
+    <Content Include="Student\plugins\bootstrap.min.js" />
     <Content Include="Student\plugins\bootstrap4-duallistbox\bootstrap-duallistbox.css" />
     <Content Include="Student\plugins\bootstrap4-duallistbox\bootstrap-duallistbox.min.css" />
     <Content Include="Student\plugins\bootstrap4-duallistbox\jquery.bootstrap-duallistbox.js" />
@@ -5296,6 +5298,7 @@
     <Content Include="Student\plugins\jquery-validation\localization\methods_nl.min.js" />
     <Content Include="Student\plugins\jquery-validation\localization\methods_pt.js" />
     <Content Include="Student\plugins\jquery-validation\localization\methods_pt.min.js" />
+    <Content Include="Student\plugins\jquery.min.js" />
     <Content Include="Student\plugins\jquery\jquery.js" />
     <Content Include="Student\plugins\jquery\jquery.min.js" />
     <Content Include="Student\plugins\jquery\jquery.slim.js" />
@@ -5655,6 +5658,7 @@
     <Content Include="Student\plugins\pdfmake\pdfmake.js" />
     <Content Include="Student\plugins\pdfmake\pdfmake.min.js" />
     <Content Include="Student\plugins\pdfmake\vfs_fonts.js" />
+    <Content Include="Student\plugins\popper.min.js" />
     <Content Include="Student\plugins\popper\esm\popper-utils.js" />
     <Content Include="Student\plugins\popper\esm\popper-utils.min.js" />
     <Content Include="Student\plugins\popper\esm\popper.js" />

@@ -38,7 +38,7 @@ namespace KRS_Academy.Student
             {
                 int typingId = Convert.ToInt32(e.CommandArgument);
                 hfTypingId.Value = typingId.ToString();
-                //ScriptManager.RegisterStartupScript(this, this.GetType(), "showModal", "showModal();", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "showModal", $"showModal({typingId});", true);
             }
         }
 
