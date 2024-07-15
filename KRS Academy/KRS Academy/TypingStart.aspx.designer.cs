@@ -78,13 +78,22 @@ namespace KRS_Academy
         protected global::System.Web.UI.Timer count;
 
         /// <summary>
-        /// backspaceCheckbox control.
+        /// chk control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox backspaceCheckbox;
+        protected global::System.Web.UI.WebControls.CheckBox chk;
+
+        /// <summary>
+        /// backspace control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label backspace;
 
         /// <summary>
         /// input control.
@@ -112,6 +121,15 @@ namespace KRS_Academy
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button submit_button;
+
+        /// <summary>
+        /// lblTimeResult control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTimeResult;
 
         /// <summary>
         /// lblTyped control.

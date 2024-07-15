@@ -187,8 +187,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div style="display: flex; align-items: center;">
                             <img src="images/trophy.png" alt="Trophy" width="50" height="50" style="margin-right: 200px;">
                             <div>
-                                <h5 class="text-center" style="font-weight: 500; font-size: 30px;">Congratulations! You have completed the coaching session successfully.</h5>
-                                <h6 class="text-center" style="font-weight: 600;">Let's see how you performed</h6>
+                                <h2 class="text-center" style="font-weight: 500;">Congratulations <asp:Label ID="stuName" runat="server"></asp:Label> You have completed the exam successfully.</h2>
+                                <h4 class="text-center" style="font-weight: 500;">Let's see how you performed</h4>
                             </div>
                         </div>
 
@@ -198,135 +198,82 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <div class="row">
                                     <div class="col option">
                                         <img src="images/check.png" alt="Correct" width="20" height="20">Skipped Words:  
-                      <h6>&nbsp; 1462</h6>
+                      <h6>&nbsp; <asp:Label ID="SkippedWord" runat="server"></asp:Label></h6>
                                     </div>
                                     <div class="col option">
                                         <img src="images/check.png" alt="Incorrect" width="20" height="20">Total Backspace Pressed:
-                      <h6>&nbsp; 0 Times</h6>
+                      <h6>&nbsp; <asp:Label ID="Backspace" runat="server"></asp:Label> Times</h6>
                                     </div>
                                     <div class="col option">
                                         <img src="images/check.png" alt="Attempted" width="20" height="20">Total Time Allotted:
-                      <h6>&nbsp;0 Mins</h6>
+                      &nbsp;<asp:Label ID="TimeAllocate" runat="server"></asp:Label> Mins
                                     </div>
                                     <div class="col option">
                                         <img src="images/check.png" alt="Unattempted" width="20" height="20">
                                         Time Taken:
-                      <h6>&nbsp;00:00</h6>
+                      <h6>&nbsp;<asp:Label ID="TimeTaken" runat="server"></asp:Label></h6>
                                     </div>
 
                                 </div>
                                 <div class="row">
                                     <div class="col option">
                                         <img src="images/check.png" alt="Correct" width="20" height="20">Total Words:  
-                      <h6>&nbsp; 1462</h6>
+                      &nbsp; <asp:Label ID="TotalWords" runat="server"></asp:Label>
                                     </div>
-
-
-                                </div>
-                                <h5>Method 1 (One Word = 5 Character or Key Strokes)</h5>
-                                <div class="row">
                                     <div class="col option">
-                                        <img src="images/check.png" alt="Correct" width="20" height="20">Total Characters Typed:  
-                      <h6>&nbsp; 1 (0 Words)</h6>
+                                        <img src="images/check.png" alt="Correct" width="20" height="20">Gross Speed:  
+                      &nbsp; <asp:Label ID="GrossSpeed" runat="server"></asp:Label> WPM
                                     </div>
                                     <div class="col option">
                                         <img src="images/check.png" alt="Incorrect" width="20" height="20">Correct Characters:
-                      <h6>&nbsp;1 (0 Words)</h6>
+                      &nbsp<asp:Label ID="CorrectWords" runat="server"></asp:Label> (0 Words)
                                     </div>
                                     <div class="col option">
                                         <img src="images/check.png" alt="Attempted" width="20" height="20">
                                         Wrong Characters:
-                      <h6>&nbsp;0 (0 Words)</h6>
+                      &nbsp;<asp:Label ID="WrongWords" runat="server"></asp:Label> (0 Words)
                                     </div>
+
+                                </div>
+                                <div class="row">
                                     <div class="col option">
                                         <img src="images/check.png" alt="Unattempted" width="20" height="20">
                                         Accuracy:
-                      <h6>&nbsp;NaN%</h6>
+                      &nbsp;<asp:Label ID="Accuracy" runat="server"></asp:Label>
                                     </div>
-
-                                </div>
-                                <div class="row">
-                                    <div class="col option">
-                                        <img src="images/check.png" alt="Correct" width="20" height="20">Gross Speed:  
-                      <h6>&nbsp; 121.6 WPM</h6>
-                                    </div>
-                                    <div class="col option">
-                                        <img src="images/check.png" alt="Incorrect" width="20" height="20">Net Speed:
-                      <h6>&nbsp;13.6 WPM</h6>
-                                    </div>
-
-                                </div>
-                                <h5>Method 2 (One Word = Group of Letters Seperated by Space)</h5>
-                                <div class="row">
-                                    <div class="col option">
-                                        <img src="images/check.png" alt="Correct" width="20" height="20">Words Typed:  
-                      <h6>&nbsp; 8</h6>
-                                    </div>
-                                    <div class="col option">
-                                        <img src="images/check.png" alt="Incorrect" width="20" height="20">Wrong Words :
-                      <h6>&nbsp;8</h6>
-                                    </div>
-                                    <div class="col option">
-                                        <img src="images/check.png" alt="Attempted" width="20" height="20">Correct Words :
-                      <h6>&nbsp;0</h6>
-                                    </div>
-                                    <div class="col option">
-                                        <img src="images/check.png" alt="Unattempted" width="20" height="20">
-                                        Accuracy:
-                      <h6>&nbsp;NaN%</h6>
-                                    </div>
-
-                                </div>
-                                <div class="row">
-                                    <div class="col option">
-                                        <img src="images/check.png" alt="Correct" width="20" height="20">Gross Speed : 
-                      <h6>&nbsp; 60 WPM</h6>
-                                    </div>
-                                    <div class="col option">
-                                        <img src="images/check.png" alt="Incorrect" width="20" height="20">
-                                        Net Speed :
-                      <h6>&nbsp;0 WPM</h6>
-                                    </div>
-
-                                </div>
-                                <h5>Marks Distribution (as RHC)</h5>
-                                <div class="row">
                                     <div class="col option">
                                         <img src="images/check.png" alt="Correct" width="20" height="20">Marks Out of 50 : 
-                      <h6>&nbsp;0.00</h6>
+                      &nbsp;0.00
                                     </div>
-                                    <div class="col option">
-                                        <img src="images/check.png" alt="Incorrect" width="20" height="20">Marks Out of 25 :
-                      <h6>&nbsp;0.00</h6>
-                                    </div>
-
+                                    <div class="col option"></div>
+                                    <div class="col option"></div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="inner-card">
-                            <div class="card-body">
-                                <p class="card-text">
-                                    <asp:Label ID="LblResult" runat="server" />
-                                </p>
-                            </div>
-                        </div>
+                    </div>
+                </div>
+                <div class="inner-card">
+                    <div class="card-body">
+                        <p id="LblResult" runat="server" class="card-text">
+                            <asp:Label ID="LblResult1" runat="server" />
+                        </p>
                     </div>
                 </div>
             </div>
-        </form>
+    </div>
+    </form>
         <!-- /.content-wrapper -->
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
-        <footer class="main-footer" style="text-align: center;">
-            <!-- To the right -->
-            <!-- Default to the left -->
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">KRS Academy</a>.</strong> All rights reserved.
-        </footer>
-        <!-- Main Footer -->
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+    <footer class="main-footer" style="text-align: center;">
+        <!-- To the right -->
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">KRS Academy</a>.</strong> All rights reserved.
+    </footer>
+    <!-- Main Footer -->
 
     </div>
     <!-- ./wrapper -->

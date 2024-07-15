@@ -251,8 +251,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </div>
                         <div class="backspace-container" style="text-align: center; display: flex; align-items: center;">
                             <h4 style="margin-right: 10px;">Backspace:</h4>
-                            <asp:CheckBox ID="backspaceCheckbox" runat="server" />
-                            <button id="spaceCountButton" style="padding: 10px; border-radius: 5px; background-color: rgb(255, 255, 255);" disabled>Space Count: 0</button>
+                            <asp:CheckBox ID="chk" runat="server" AutoPostBack="true" />
+                            <button id="spaceCountButton" style="padding: 10px; border-radius: 5px; background-color: rgb(255, 255, 255);" disabled>
+                                Space Count:
+                                <asp:Label ID="backspace" runat="server"></asp:Label></button>
                         </div>
                         <div class="d-md-flex justify-content-md-end">
                             <h3 style="font-weight: 400;">Font Size:</h3>
@@ -273,8 +275,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                     </div>
                     <asp:Button ID="submit_button" Style="align-items: center;" Text="Submit" runat="server" class="btn btn-primary mt-2 mb-2" OnClick="submit_button_Click" />
+                    <div style="justify-content: right;">
+                        <label>Speed: </label>
+                        <asp:Label ID="lblTimeResult" Style="color: green;" runat="server"></asp:Label>
+                    </div>
                 </div>
                 <asp:HiddenField ID="lblTyped" runat="server" />
+
             </div>
         </form>
         <aside class="control-sidebar control-sidebar-dark">
@@ -284,7 +291,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">KRS Academy</a>.</strong> All rights reserved.
         </footer>
     </div>
-    <script>
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="dist/js/adminlte.min.js"></script>
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="plugins/toastr/toastr.min.js"></script>
+    <script type="text/javascript">
         const incButton = document.getElementById('inc');
         const decButton = document.getElementById('dec');
         const sentence = document.getElementById('sentence');
@@ -312,33 +326,79 @@ scratch. This page gets rid of all links and provides the needed markup only.
             inputText.focus();
         }
 
-        
-        const textarea = document.getElementById('input_text');
-        const backspaceCheckbox = document.getElementById('backspaceCheckbox');
-        const backspaceCountButton = document.getElementById('spaceCountButton');
+        document.addEventListener('DOMContentLoaded', function () {
+            const textInput = document.getElementById('<%=input_text.ClientID%>');
+            const backspaceCountDisplay = document.getElementById('<%=backspace.ClientID%>');
+            let backspaceCount = 0;
+            let typingSpeed = 0;
+            var ch = Boolean(document.getElementById("chk").checked);
 
-        let backspaceCount = 0;
+            textInput.addEventListener('keydown', function (event) {
+                if (event.key === 'Backspace') {
+                    if (ch) {
+                        backspaceCount++;
+                        backspaceCountDisplay.textContent = backspaceCount;
+                    }
+                }
+            });
 
-        textarea.addEventListener('input', function () {
-            if (backspaceCheckbox.checked) {
-                const text = textarea.value;
-                const backspaces = (text.match(/\b/g) || []).length; // Count backspaces
-                backspaceCount = backspaces;
-                backspaceCountButton.textContent = `Backspace Count: ${backspaceCount}`;
+            var startTime;
+            var wordCount = 0;
+
+            $(document).ready(function () {
+                var inputTextId = '<%= input_text.ClientID %>';
+                var lblTimeResultId = '<%= lblTimeResult.ClientID %>';
+
+                $('#' + inputTextId).on('input', function () {
+                    if (!startTime) {
+                        startTime = new Date();
+                    }
+                    updateTypingSpeed(inputTextId, lblTimeResultId);
+                });
+
+                $('#submit_button').on('click', function () {
+                    sendStatsToServer(backspaceCount, wordCount, typingSpeed);
+                });
+            });
+
+            function updateTypingSpeed(inputTextId, lblTimeResultId) {
+                var endTime = new Date();
+                var durationInSeconds = (endTime - startTime) / 1000;
+
+                var text = $('#' + inputTextId).val().trim();
+                wordCount = text.split(/\s+/).length;
+
+                if (durationInSeconds > 0) {
+                    typingSpeed = (wordCount / durationInSeconds) * 60;
+                    $('#' + lblTimeResultId).text('Your typing speed is approximately ' + typingSpeed.toFixed(2) + ' words per minute.');
+                }
+            }
+
+            function sendStatsToServer(backspaceCount, wordCount, typingSpeed) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'TypingStart.aspx/SaveStats',
+                    data: JSON.stringify({ backspaceCount: backspaceCount, wordCount: wordCount, typingSpeed: typingSpeed.toFixed(2) }),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log('Stats saved successfully.');
+                    },
+                    error: function (error) {
+                        console.log('Error saving stats: ' + error);
+                    }
+                });
             }
         });
+        function pageLoad(sender, args) {
+            $('.toastrDefaultSuccess').click(function () {
+                toastr.success('Insert successfully');
+            });
 
-        backspaceCheckbox.addEventListener('change', function () {
-            if (backspaceCheckbox.checked) {
-                backspaceCountButton.disabled = true;
-            } else {
-                backspaceCountButton.disabled = false;
-                backspaceCountButton.textContent = `Backspace Count: ${backspaceCount}`;
-            }
-        });
+            $('.toastrDefaultError').click(function () {
+                toastr.error('Insert failed');
+            });
+        }
     </script>
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="dist/js/adminlte.min.js"></script>
 </body>
 </html>

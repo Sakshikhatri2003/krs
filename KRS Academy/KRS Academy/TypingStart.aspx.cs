@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Web;
+using System.Web.Services;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace KRS_Academy
 {
@@ -12,7 +13,6 @@ namespace KRS_Academy
     {
         string connectionString = ConfigurationManager.ConnectionStrings["KRS"].ConnectionString;
         private static int remainingTime;
-        private int backspaceCount = 0;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -41,6 +41,14 @@ namespace KRS_Academy
             }
         }
 
+        [WebMethod]
+        public static void SaveStats(int backspaceCount, int wordCount, string typingSpeed)
+        {
+            HttpContext.Current.Session["BackspaceCount"] = backspaceCount;
+            HttpContext.Current.Session["WordCount"] = wordCount;
+            HttpContext.Current.Session["TypingSpeed"] = typingSpeed;
+        }
+
         protected void startTypingButton_Click(object sender, EventArgs e)
         {
             count.Enabled = true;
@@ -56,26 +64,13 @@ namespace KRS_Academy
             {
                 remainingTime--;
                 UpdateTimerLabel();
-                if(timer.Text == "00:00")
-                {
-                    string paragraph1 = input.Text;
-                    string paragraph2 = input_text.Text;
-
-                    double similarityScore = CompareParagraphs(paragraph1, paragraph2);
-                    string highlightedText = HighlightDifferentWords(paragraph1, paragraph2);
-
-                    string result = $"Similarity score between the paragraphs: {similarityScore:P}<br /><br />{highlightedText}";
-
-                    Session["Result"] = result;
-
-                    Response.Redirect("TypingReview.aspx");
-                }
             }
             else
             {
                 count.Enabled = false;
-                timer.Text = "00:00";
                 input_text.ReadOnly = true;
+
+                CommonInsert();
             }
         }
 
@@ -85,27 +80,106 @@ namespace KRS_Academy
             int seconds = remainingTime % 60;
             timer.Text = $"{minutes:00}:{seconds:00}";
         }
+
         protected void input_text_TextChanged(object sender, EventArgs e)
         {
-            if (backspaceCheckbox.Checked && input_text.Text.Contains("\b"))
-            {
-                backspaceCount++;
-                // Update the display if needed (if backspace count is to be displayed differently)
-            }
+            // Handle text changed event if needed
         }
 
         protected void submit_button_Click(object sender, EventArgs e)
         {
             count.Enabled = false;
+            CommonInsert();
+        }
+
+        protected void CommonInsert()
+        {
             string paragraph1 = input.Text;
             string paragraph2 = input_text.Text;
 
             double similarityScore = CompareParagraphs(paragraph1, paragraph2);
             string highlightedText = HighlightDifferentWords(paragraph1, paragraph2);
+            string result = $"<br />{highlightedText}";
 
-            string result = $"Similarity score between the paragraphs: {similarityScore:P}<br /><br />{highlightedText}";
+            int allottedTimeInSeconds = Convert.ToInt32(timeSelector.SelectedValue) * 60;
+            int timeTakenInSeconds = allottedTimeInSeconds - remainingTime;
 
+            int minutesTaken = timeTakenInSeconds / 60;
+            int secondsTaken = timeTakenInSeconds % 60;
+            string timeTakenFormatted = $"{minutesTaken:00}:{secondsTaken:00}";
+
+            int backspaceCount = (int)Session["BackspaceCount"];
+            int wordCount = (int)Session["WordCount"];
+            string typingSpeed = Session["TypingSpeed"].ToString();
+
+            string[] originalWords = paragraph1.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] typedWords = paragraph2.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+
+            int skippedWords = Math.Max(0, originalWords.Length - typedWords.Length);
+            int correctWords = 0;
+            int wrongWords = 0;
+
+            for (int i = 0; i < typedWords.Length; i++)
+            {
+                if (i < originalWords.Length)
+                {
+                    if (originalWords[i].Equals(typedWords[i], StringComparison.OrdinalIgnoreCase))
+                        correctWords++;
+                    else
+                        wrongWords++;
+                }
+                else
+                {
+                    wrongWords++;
+                }
+            }
+
+            double accuracyPercentage = (double)correctWords / originalWords.Length * 100;
+            Session["Accuracy"] = accuracyPercentage.ToString("F2") + "%";
+
+            Session["Speed"] = typingSpeed;
+            Session["TimeAllote"] = timeSelector.SelectedValue;
+            Session["TimeTaken"] = timeTakenFormatted;
+            Session["BackspaceCount"] = backspaceCount;
+            Session["WordCount"] = wordCount;
+            Session["SkippedWords"] = skippedWords;
+            Session["CorrectWords"] = correctWords;
+            Session["WrongWords"] = wrongWords;
             Session["Result"] = result;
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "INSERT INTO Result (Test_id, Input_text, Result_text, SkippedWord, Backspace, TimeAlloted, TimeTaken, TotalWords, GrossSpeed, CorrectWord, WrongWord, Accuracy, Marks) " +
+                               "VALUES (@Test_id, @Input_text, @Result_text, @SkippedWord, @Backspace, @TimeAlloted, @TimeTaken, @TotalWords, @GrossSpeed, @CorrectWord, @WrongWord, @Accuracy, @Marks)";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Test_id", Session["TestId"]);
+                    cmd.Parameters.AddWithValue("@Input_text", input.Text);
+                    cmd.Parameters.AddWithValue("@Result_text", highlightedText);
+                    cmd.Parameters.AddWithValue("@SkippedWord", skippedWords);
+                    cmd.Parameters.AddWithValue("@Backspace", backspaceCount);
+                    cmd.Parameters.AddWithValue("@TimeAlloted", timeSelector.SelectedValue);
+                    cmd.Parameters.AddWithValue("@TimeTaken", timeTakenFormatted);
+                    cmd.Parameters.AddWithValue("@TotalWords", wordCount);
+                    cmd.Parameters.AddWithValue("@GrossSpeed", typingSpeed);
+                    cmd.Parameters.AddWithValue("@CorrectWord", correctWords);
+                    cmd.Parameters.AddWithValue("@WrongWord", wrongWords);
+                    cmd.Parameters.AddWithValue("@Accuracy", accuracyPercentage); 
+                    cmd.Parameters.AddWithValue("@Marks", DBNull.Value);
+
+                    try
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "toastrSuccess", "toastr.success('Data inserted successfully.');", true);
+                    }
+                    catch (Exception ex)
+                    {
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "toastrError", $"toastr.error('Error inserting data: {ex.Message}');", true);
+                    }
+                }
+            }
 
             Response.Redirect("TypingReview.aspx");
         }
@@ -116,14 +190,10 @@ namespace KRS_Academy
             string[] words2 = text2.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
 
             HashSet<string> set1 = new HashSet<string>(words1);
-            HashSet<string> set2 = new HashSet<string>(words2);
-
-            HashSet<string> uniqueWordsInText1 = new HashSet<string>(set1);
-            uniqueWordsInText1.ExceptWith(set2);
 
             for (int i = 0; i < words2.Length; i++)
             {
-                if (uniqueWordsInText1.Contains(words2[i]))
+                if (!set1.Contains(words2[i]))
                 {
                     words2[i] = $"<span style='color:red;'>{words2[i]}</span>";
                 }

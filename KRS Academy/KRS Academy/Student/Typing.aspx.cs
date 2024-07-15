@@ -46,7 +46,8 @@ namespace KRS_Academy.Student
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "INSERT INTO TestMaster (Date, Typing_id, StudentName, MobileNo) VALUES (@Date, @Typing_id, @StudentName, @MobileNo)";
+                string query = "INSERT INTO TestMaster (Date, Typing_id, StudentName, MobileNo) VALUES (@Date, @Typing_id, @StudentName, @MobileNo); " +
+                               "SELECT SCOPE_IDENTITY();";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Date", DateTime.Now.Date);
@@ -57,7 +58,9 @@ namespace KRS_Academy.Student
                     try
                     {
                         conn.Open();
-                        cmd.ExecuteNonQuery();
+                        int newTestId = Convert.ToInt32(cmd.ExecuteScalar());
+                        Session["StuName"] = studentName.Text;
+                        Session["TestId"] = newTestId;
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "toastrSuccess", "toastr.success('Data inserted successfully.');", true);
                         Response.Redirect("~/TypingStart.aspx?Id=" + hfTypingId.Value, false);
                         Context.ApplicationInstance.CompleteRequest();
