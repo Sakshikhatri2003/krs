@@ -30,20 +30,6 @@
                 </h6>
                 <div class="container">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item" style="margin-top: 10px;">
-                            <span class="nav-label">
-                                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-                                    <ContentTemplate>
-                                        <asp:Label ID="timer" Style="color: black; font-size: large;" runat="server"></asp:Label>
-                                        <asp:Timer ID="count" runat="server" Interval="1000" OnTick="count_Tick"></asp:Timer>
-                                    </ContentTemplate>
-                                    <Triggers>
-                                        <asp:AsyncPostBackTrigger ControlID="count" EventName="Tick" />
-                                        <asp:AsyncPostBackTrigger ControlID="startTypingButton" EventName="Click" />
-                                    </Triggers>
-                                </asp:UpdatePanel>
-                            </span>
-                        </li>
                         <li class="nav-item">
                             <span class="nav-label">Total words:</span> <span id="totalWords">0</span>
                         </li>
@@ -64,21 +50,32 @@
                 <div class="card first mt-3">
                     <div class="card-body">
                         <div class="backspace-container">
-                            <label for="timeSelector" style="margin-right: 2px;">Select Time:</label>
-                            <asp:DropDownList class="form-control" runat="server" ID="timeSelector" Style="width: 100px; margin-right: 0;">
+                            <label for="timeSelector">Select Time:</label>
+                            <asp:DropDownList class="form-control" runat="server" ID="timeSelector" Style="width: 80px; margin-right: 0;">
                                 <asp:ListItem Value="10">10 min</asp:ListItem>
                                 <asp:ListItem Value="20">20 min</asp:ListItem>
                                 <asp:ListItem Value="30">30 min</asp:ListItem>
                                 <asp:ListItem Value="40">40 min</asp:ListItem>
                                 <asp:ListItem Value="50">50 min</asp:ListItem>
                             </asp:DropDownList>
+                            <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                                <ContentTemplate>
+                                    <asp:Label ID="timer" Style="color: black; font-size: large; width: 20px;" runat="server"></asp:Label>
+                                    <asp:Timer ID="count" runat="server" Interval="1000" OnTick="count_Tick"></asp:Timer>
+                                </ContentTemplate>
+                                <Triggers>
+                                    <asp:AsyncPostBackTrigger ControlID="count" EventName="Tick" />
+                                    <asp:AsyncPostBackTrigger ControlID="startTypingButton" EventName="Click" />
+                                </Triggers>
+                            </asp:UpdatePanel>
                         </div>
                         <br>
                         <div class="backspace-container">
                             <label for="backspaceSwitch" style="margin-right: 10px;">Backspace:</label>
                             <label>
-                                <asp:CheckBox ID="chk" style="margin-top: 5px;" runat="server" AutoPostBack="true" />
-                                Count: <asp:Label ID="backspace" runat="server"></asp:Label>
+                                <asp:CheckBox ID="chk" Style="margin-top: 5px;" runat="server" AutoPostBack="true" />
+                                Count:
+                                <asp:Label ID="backspace" runat="server"></asp:Label>
                             </label>
                         </div>
                         <br>
@@ -122,27 +119,87 @@
         <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
         <script src="plugins/toastr/toastr.min.js"></script>
         <script>
-            function toggleFullScreen() {
-                var elem = document.getElementById('typingDiv');
-                if (!document.fullscreenElement) {
-                    if (elem.requestFullscreen) {
-                        elem.requestFullscreen();
-                    } else if (elem.mozRequestFullScreen) { /* Firefox */
-                        elem.mozRequestFullScreen();
-                    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-                        elem.webkitRequestFullscreen();
-                    } else if (elem.msRequestFullscreen) { /* IE/Edge */
-                        elem.msRequestFullscreen();
+            document.addEventListener('DOMContentLoaded', function () {
+                const textInput = document.getElementById('<%=input_text.ClientID%>');
+                const backspaceCountDisplay = document.getElementById('<%=backspace.ClientID%>');
+                let backspaceCount = 0;
+                let typingSpeed = 0;
+                var ch = Boolean(document.getElementById("chk").checked);
+
+                textInput.addEventListener('keydown', function (event) {
+                    if (event.key === 'Backspace') {
+                        if (ch) {
+                            backspaceCount++;
+                            backspaceCountDisplay.textContent = backspaceCount;
+                        }
                     }
+                });
+
+                var startTime;
+                var wordCount = 0;
+
+                $(document).ready(function () {
+                    var inputTextId = '<%= input_text.ClientID %>';
+                    var lblTimeResultId = '<%= lblTimeResult.ClientID %>';
+
+                    $('#' + inputTextId).on('input', function () {
+                        if (!startTime) {
+                            startTime = new Date();
+                        }
+                        updateTypingSpeed(inputTextId, lblTimeResultId);
+                    });
+
+                    $('#submit_button').on('click', function () {
+                        sendStatsToServer(backspaceCount, wordCount, typingSpeed);
+                    });
+                });
+
+                function updateTypingSpeed(inputTextId, lblTimeResultId) {
+                    var endTime = new Date();
+                    var durationInSeconds = (endTime - startTime) / 1000;
+
+                    var text = $('#' + inputTextId).val().trim();
+                    wordCount = text.split(/\s+/).length;
+
+                    if (durationInSeconds > 0) {
+                        typingSpeed = (wordCount / durationInSeconds) * 60;
+                        $('#' + lblTimeResultId).text('Your typing speed is approximately ' + typingSpeed.toFixed(2) + ' words per minute.');
+                    }
+                }
+
+                function sendStatsToServer(backspaceCount, wordCount, typingSpeed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'TypingStart.aspx/SaveStats',
+                        data: JSON.stringify({ backspaceCount: backspaceCount, wordCount: wordCount, typingSpeed: typingSpeed.toFixed(2) }),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log('Stats saved successfully.');
+                        },
+                        error: function (error) {
+                            console.log('Error saving stats: ' + error);
+                        }
+                    });
+                }
+            });
+
+            function pageLoad(sender, args) {
+                $('.toastrDefaultSuccess').click(function () {
+                    toastr.success('Insert successfully');
+                });
+
+                $('.toastrDefaultError').click(function () {
+                    toastr.error('Insert failed');
+                });
+            }
+
+            function toggleFullScreen() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
                 } else {
                     if (document.exitFullscreen) {
                         document.exitFullscreen();
-                    } else if (document.mozCancelFullScreen) { /* Firefox */
-                        document.mozCancelFullScreen();
-                    } else if (document.webkitExitFullscreen) { /* Chrome, Safari & Opera */
-                        document.webkitExitFullscreen();
-                    } else if (document.msExitFullscreen) { /* IE/Edge */
-                        document.msExitFullscreen();
                     }
                 }
             }
@@ -196,7 +253,7 @@
             }
 
             function updateTotalWordsCount() {
-                var text = $('#<%= input.ClientID %>').val().trim();
+                var text = $('#<%= input.ClientID %>').text().trim();
                 var words = text.split(/\s+/);
                 wordCount = words.length;
                 $('#totalWords').text(wordCount);
