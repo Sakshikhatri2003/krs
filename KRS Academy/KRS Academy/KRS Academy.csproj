@@ -5929,8 +5929,9 @@
     <Content Include="Student\plugins\uplot\uPlot.min.css" />
     <Content Include="Student\starter.html" />
     <Content Include="Student\Typing.aspx" />
-    <Content Include="TypingReview.aspx" />
-    <Content Include="TypingStart.aspx" />
+    <Content Include="Student\styles.css" />
+    <Content Include="Student\TypingReview.aspx" />
+    <Content Include="Student\TypingStart.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -5988,18 +5989,18 @@
     <Compile Include="Student\Typing.aspx.designer.cs">
       <DependentUpon>Typing.aspx</DependentUpon>
     </Compile>
-    <Compile Include="TypingReview.aspx.cs">
+    <Compile Include="Student\TypingReview.aspx.cs">
       <DependentUpon>TypingReview.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="TypingReview.aspx.designer.cs">
+    <Compile Include="Student\TypingReview.aspx.designer.cs">
       <DependentUpon>TypingReview.aspx</DependentUpon>
     </Compile>
-    <Compile Include="TypingStart.aspx.cs">
+    <Compile Include="Student\TypingStart.aspx.cs">
       <DependentUpon>TypingStart.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="TypingStart.aspx.designer.cs">
+    <Compile Include="Student\TypingStart.aspx.designer.cs">
       <DependentUpon>TypingStart.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
