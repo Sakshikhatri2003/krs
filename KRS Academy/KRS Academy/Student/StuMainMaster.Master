@@ -127,23 +127,15 @@
                             <a href="Typing.aspx" class="nav-link">
                                 <img src="images/keyboard.png" alt="" style="height: 20px;" class="icon">
                                 <p>
-                                    &nbsp;&nbsp; Typing
+                                    &nbsp;&nbsp; English Typing
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="steno.html" class="nav-link">
-                                <img src="images/registrar.png" alt="" style="height: 20px;" class="icon">
+                            <a href="HindiTyping.aspx" class="nav-link">
+                                <img src="images/keyboard.png" alt="" style="height: 20px;" class="icon">
                                 <p>
-                                    &nbsp;&nbsp; Steno
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="efficiency.html" class="nav-link">
-                                <img src="images/registrar.png" alt="" style="height: 20px;" class="icon">
-                                <p>
-                                    &nbsp;&nbsp; Efficiency
+                                    &nbsp;&nbsp; Hindi Typing
                                 </p>
                             </a>
                         </li>
@@ -165,7 +157,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="login.html" class="nav-link">
+                            <a href="../Login.aspx" class="nav-link">
                                 <img src="images/power-off.png" alt="" style="height: 20px;" class="icon">
                                 <p>
                                     &nbsp;&nbsp; Logout

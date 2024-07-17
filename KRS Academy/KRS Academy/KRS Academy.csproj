@@ -4014,6 +4014,7 @@
     <Content Include="Student\dist\js\pages\dashboard.js" />
     <Content Include="Student\dist\js\pages\dashboard2.js" />
     <Content Include="Student\dist\js\pages\dashboard3.js" />
+    <Content Include="Student\HindiTyping.aspx" />
     <Content Include="Student\HindiTypingStart.aspx" />
     <Content Include="Student\images\2.png" />
     <Content Include="Student\images\2963882.jpg" />
@@ -5977,6 +5978,13 @@
     </Compile>
     <Compile Include="Student\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Student\HindiTyping.aspx.cs">
+      <DependentUpon>HindiTyping.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\HindiTyping.aspx.designer.cs">
+      <DependentUpon>HindiTyping.aspx</DependentUpon>
     </Compile>
     <Compile Include="Student\HindiTypingStart.aspx.cs">
       <DependentUpon>HindiTypingStart.aspx</DependentUpon>

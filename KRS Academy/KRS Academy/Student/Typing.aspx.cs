@@ -22,7 +22,7 @@ namespace KRS_Academy.Student
 
         private void LoadTypingTests()
         {
-            string query = "SELECT * FROM TypingMaster";
+            string query = "SELECT * FROM TypingMaster where LanguageCode = "+ 0 + "";
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 SqlDataAdapter da = new SqlDataAdapter(query, conn);
@@ -47,14 +47,6 @@ namespace KRS_Academy.Student
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query1 = "SELECT distinct[LanguageCode] FROM TypingMaster WHERE TypingId = @TypingId";
-                using (SqlCommand cmd = new SqlCommand(query1, conn))
-                {
-                    cmd.Parameters.AddWithValue("@TypingId", hfTypingId.Value);
-                    conn.Open();
-                    object result = cmd.ExecuteScalar();
-                    code = result != null ? Convert.ToInt32(result) : 0;
-                }
 
                 string query = "INSERT INTO TestMaster (Date, Typing_id, StudentName, MobileNo) VALUES (@Date, @Typing_id, @StudentName, @MobileNo); " +
                                "SELECT SCOPE_IDENTITY();";
@@ -71,16 +63,7 @@ namespace KRS_Academy.Student
                         Session["StuName"] = studentName.Text;
                         Session["TestId"] = newTestId;
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "toastrSuccess", "toastr.success('Data inserted successfully.');", true);
-
-                        if (code == 1)
-                        {
-                            Response.Redirect("HindiTypingStart.aspx?Id=" + hfTypingId.Value, false);
-                        }
-                        else
-                        {
-                            Response.Redirect("TypingStart.aspx?Id=" + hfTypingId.Value, false);
-                        }
-
+                        Response.Redirect("TypingStart.aspx?Id=" + hfTypingId.Value, false);
                         Context.ApplicationInstance.CompleteRequest();
                     }
                     catch (Exception ex)
