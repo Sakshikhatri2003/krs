@@ -28,6 +28,7 @@
             </nav>
 
             <asp:HiddenField ID="hfTypingId" runat="server" />
+            <asp:HiddenField ID="LanguageCode" runat="server" />
 
             <asp:GridView ID="TypingTable" runat="server" class="table table-striped table-bordered table-hover my-2" Style="border-radius: 10px;" AutoGenerateColumns="false" OnRowCommand="TypingTable_RowCommand" DataKeyNames="TypingId">
                 <Columns>

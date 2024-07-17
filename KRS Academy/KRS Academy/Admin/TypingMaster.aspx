@@ -22,8 +22,8 @@
                                         <label for="noticeType">Language</label>
                                         <asp:DropDownList class="form-control" runat="server" ID="languageDrp">
                                             <asp:ListItem Value="">Select Type</asp:ListItem>
-                                            <asp:ListItem Value="Hindi">Hindi</asp:ListItem>
-                                            <asp:ListItem Value="English">English</asp:ListItem>
+                                            <asp:ListItem Value="1">Hindi</asp:ListItem>
+                                            <asp:ListItem Value="0">English</asp:ListItem>
                                         </asp:DropDownList>
                                     </div>
                                 </div>

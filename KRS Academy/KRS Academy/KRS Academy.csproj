@@ -4014,6 +4014,7 @@
     <Content Include="Student\dist\js\pages\dashboard.js" />
     <Content Include="Student\dist\js\pages\dashboard2.js" />
     <Content Include="Student\dist\js\pages\dashboard3.js" />
+    <Content Include="Student\HindiTypingStart.aspx" />
     <Content Include="Student\images\2.png" />
     <Content Include="Student\images\2963882.jpg" />
     <Content Include="Student\images\5026563.jpg" />
@@ -5919,6 +5920,7 @@
     <Content Include="Student\plugins\tempusdominus-bootstrap-4\css\tempusdominus-bootstrap-4.min.css" />
     <Content Include="Student\plugins\tempusdominus-bootstrap-4\js\tempusdominus-bootstrap-4.js" />
     <Content Include="Student\plugins\tempusdominus-bootstrap-4\js\tempusdominus-bootstrap-4.min.js" />
+    <Content Include="Student\plugins\Tiro_Devanagari_Hindi\OFL.txt" />
     <Content Include="Student\plugins\toastr\toastr.css" />
     <Content Include="Student\plugins\toastr\toastr.min.css" />
     <Content Include="Student\plugins\toastr\toastr.min.js" />
@@ -5975,6 +5977,13 @@
     </Compile>
     <Compile Include="Student\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Student\HindiTypingStart.aspx.cs">
+      <DependentUpon>HindiTypingStart.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\HindiTypingStart.aspx.designer.cs">
+      <DependentUpon>HindiTypingStart.aspx</DependentUpon>
     </Compile>
     <Compile Include="Student\StuMainMaster.Master.cs">
       <DependentUpon>StuMainMaster.Master</DependentUpon>
@@ -6430,6 +6439,8 @@
     <Content Include="plugins\summernote\summernote.js.map" />
     <Content Include="plugins\summernote\summernote.min.js.map" />
     <Content Include="plugins\toastr\toastr.js.map" />
+    <Content Include="Student\plugins\Tiro_Devanagari_Hindi\TiroDevanagariHindi-Italic.ttf" />
+    <Content Include="Student\plugins\Tiro_Devanagari_Hindi\TiroDevanagariHindi-Regular.ttf" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

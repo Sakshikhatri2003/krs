@@ -42,6 +42,15 @@ namespace KRS_Academy.Student
         protected global::System.Web.UI.WebControls.HiddenField hfTypingId;
 
         /// <summary>
+        /// LanguageCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField LanguageCode;
+
+        /// <summary>
         /// TypingTable control.
         /// </summary>
         /// <remarks>

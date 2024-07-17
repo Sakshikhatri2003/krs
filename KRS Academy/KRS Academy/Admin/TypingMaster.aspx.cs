@@ -40,10 +40,11 @@ namespace KRS_Academy.Admin
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.AddWithValue("@Date", Date.Text);
-                    cmd.Parameters.AddWithValue("@Language", languageDrp.SelectedValue);
+                    cmd.Parameters.AddWithValue("@Language", languageDrp.SelectedItem.Text); // Use SelectedItem.Text for the Language
                     cmd.Parameters.AddWithValue("@TestName", testName.Text);
                     cmd.Parameters.AddWithValue("@InputText", Content.Text);
                     cmd.Parameters.AddWithValue("@TotalWords", WordsNo.Text);
+                    cmd.Parameters.AddWithValue("@LanguageCode", int.Parse(languageDrp.SelectedValue)); // Assuming LanguageCode is an int
 
                     try
                     {
@@ -86,11 +87,10 @@ namespace KRS_Academy.Admin
                     if (reader.Read())
                     {
                         Date.Text = reader["Date"].ToString();
-                        languageDrp.SelectedValue = reader["Language"].ToString();
+                        languageDrp.SelectedValue = reader["LanguageCode"].ToString();
                         testName.Text = reader["TestName"].ToString();
                         Content.Text = reader["InputText"].ToString();
                         WordsNo.Text = reader["TotalWords"].ToString();
-
                         submit.Visible = false;
                         update.Visible = true;
                     }
@@ -109,10 +109,11 @@ namespace KRS_Academy.Admin
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@TypingId", typingId);
                     cmd.Parameters.AddWithValue("@Date", Date.Text);
-                    cmd.Parameters.AddWithValue("@Language", languageDrp.SelectedValue);
+                    cmd.Parameters.AddWithValue("@Language", languageDrp.SelectedItem.Text); // Use SelectedItem.Text for the Language
                     cmd.Parameters.AddWithValue("@TestName", testName.Text);
                     cmd.Parameters.AddWithValue("@InputText", Content.Text);
                     cmd.Parameters.AddWithValue("@TotalWords", WordsNo.Text);
+                    cmd.Parameters.AddWithValue("@LanguageCode", int.Parse(languageDrp.SelectedValue)); // Assuming LanguageCode is an int
 
                     try
                     {
