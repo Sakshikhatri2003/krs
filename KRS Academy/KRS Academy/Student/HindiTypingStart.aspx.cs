@@ -7,10 +7,11 @@ using System.Web;
 using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using WebApp.LIBS;
 
 namespace KRS_Academy.Student
 {
-    public partial class HindiTypingStart : System.Web.UI.Page
+    public partial class HindiTypingStart : BasePageClass
     {
         string connectionString = ConfigurationManager.ConnectionStrings["KRS"].ConnectionString;
         private static int remainingTime;

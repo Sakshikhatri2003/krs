@@ -18,7 +18,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
     <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
-</head>
+    
 <style>
     .main-header {
         background-color: #d3d3d3;
@@ -165,6 +165,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         text-decoration: underline;
     }
 </style>
+</head>
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
 
@@ -212,15 +213,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
 
-                        <li class="nav-item">
-                            <a href="starter.html" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Add News or Notice
-             
-                                </p>
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a href="TypingMaster.aspx" class="nav-link">
                                 <i class="nav-icon fas fa-calendar-alt"></i>

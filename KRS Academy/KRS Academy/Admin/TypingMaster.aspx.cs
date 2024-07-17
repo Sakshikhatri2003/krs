@@ -3,10 +3,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using WebApp.LIBS;
 
 namespace KRS_Academy.Admin
 {
-    public partial class TypingMaster : System.Web.UI.Page
+    public partial class TypingMaster : BasePageClass
     {
         string connectionString = ConfigurationManager.ConnectionStrings["KRS"].ConnectionString;
 

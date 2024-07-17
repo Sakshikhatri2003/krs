@@ -4,13 +4,13 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using WebApp.LIBS;
 
 namespace KRS_Academy.Student
 {
-    public partial class Typing : System.Web.UI.Page
+    public partial class Typing : BasePageClass
     {
         string connectionString = ConfigurationManager.ConnectionStrings["KRS"].ConnectionString;
-        int code;
 
         protected void Page_Load(object sender, EventArgs e)
         {

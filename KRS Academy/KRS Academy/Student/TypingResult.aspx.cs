@@ -3,10 +3,11 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI;
+using WebApp.LIBS;
 
 namespace KRS_Academy.Student
 {
-    public partial class TypingResult : Page
+    public partial class TypingResult : BasePageClass
     {
         protected void Page_Load(object sender, EventArgs e)
         {

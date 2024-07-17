@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using WebApp.LIBS;
 
 namespace KRS_Academy
 {
-    public partial class TypingReview : System.Web.UI.Page
+    public partial class TypingReview : BasePageClass
     {
         protected void Page_Load(object sender, EventArgs e)
         {

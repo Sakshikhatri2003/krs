@@ -7,10 +7,11 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using WebApp.LIBS;
 
 namespace KRS_Academy.Student
 {
-    public partial class HindiTyping : System.Web.UI.Page
+    public partial class HindiTyping : BasePageClass
     {
         string connectionString = ConfigurationManager.ConnectionStrings["KRS"].ConnectionString;
         protected void Page_Load(object sender, EventArgs e)

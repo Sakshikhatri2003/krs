@@ -18,18 +18,16 @@ namespace WebApp.LIBS
 
             if (!SiteSession.IsLoggedIn)
             {
-
-
-                if (Request.RawUrl.Contains("admin"))
+                if (Request.RawUrl.Contains("Admin"))
+                {
+                    Response.Redirect("~/Login.aspx?ReturnUrl=" + Request.RawUrl, true);
+                }
+                if (Request.RawUrl.Contains("Student"))
                 {
                     Response.Redirect("~/Login.aspx?ReturnUrl=" + Request.RawUrl, true);
                 }
 
-
             }
-
-
-           
         }
     }
 }

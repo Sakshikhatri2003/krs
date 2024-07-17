@@ -6,10 +6,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Services;
 using System.Web.UI;
+using WebApp.LIBS;
 
 namespace KRS_Academy
 {
-    public partial class TypingStart : Page
+    public partial class TypingStart : BasePageClass
     {
         string connectionString = ConfigurationManager.ConnectionStrings["KRS"].ConnectionString;
         private static int remainingTime;
