@@ -230,42 +230,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="steno-master.html" class="nav-link">
-                                <i class="nav-icon far fa-image"></i>
-                                <p>
-                                    steno Master
-             
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="efficiency-master.html" class="nav-link">
-                                <i class="nav-icon fas fa-columns"></i>
-                                <p>
-                                    Efficiency Master
-             
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="result-master.html" class="nav-link">
-                                <i class="nav-icon fas fa-columns"></i>
-                                <p>
-                                    Result Master
-             
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pricing-master.html" class="nav-link">
-                                <i class="nav-icon fas fa-columns"></i>
-                                <p>
-                                    Pricing Master
-             
-                                </p>
-                            </a>
-                        </li>
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
