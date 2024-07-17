@@ -5930,6 +5930,7 @@
     <Content Include="Student\starter.html" />
     <Content Include="Student\Typing.aspx" />
     <Content Include="Student\styles.css" />
+    <Content Include="Student\TypingResult.aspx" />
     <Content Include="Student\TypingReview.aspx" />
     <Content Include="Student\TypingStart.aspx" />
     <Content Include="Web.config" />
@@ -5988,6 +5989,13 @@
     </Compile>
     <Compile Include="Student\Typing.aspx.designer.cs">
       <DependentUpon>Typing.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Student\TypingResult.aspx.cs">
+      <DependentUpon>TypingResult.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\TypingResult.aspx.designer.cs">
+      <DependentUpon>TypingResult.aspx</DependentUpon>
     </Compile>
     <Compile Include="Student\TypingReview.aspx.cs">
       <DependentUpon>TypingReview.aspx</DependentUpon>

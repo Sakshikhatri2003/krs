@@ -2,11 +2,14 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <form id="TypingForm" runat="server">
-        <asp:ScriptManager ID="ScriptManager1" runat="server" />
+        <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true">
+            <Scripts>
+                <asp:ScriptReference Path="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" />
+            </Scripts>
+        </asp:ScriptManager>
 
         <!-- jQuery and Bootstrap CSS and JavaScript -->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
@@ -88,10 +91,11 @@
                             <label for="mobileNo">Mobile No.</label>
                             <asp:TextBox type="text" class="form-control" runat="server" ID="mobileNo" placeholder="Enter mobile number"></asp:TextBox>
                         </div>
+                        <div class="alert alert-danger" id="validationMessage" style="display:none;"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <asp:Button runat="server" type="button" ID="start_typing" Text="Start Typing" class="btn btn-primary" OnClick="start_typing_Click" />
+                        <asp:Button runat="server" ID="start_typing" Text="Start Typing" class="btn btn-primary" OnClientClick="validateAndSubmit(); return false;" OnClick="start_typing_Click" />
                     </div>
                 </div>
             </div>
@@ -99,12 +103,34 @@
 
         <link rel="stylesheet" href="dist/css/adminlte.min.css">
         <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
-        <script src="plugins/jquery/jquery.min.js"></script>
         <script src="plugins/toastr/toastr.min.js"></script>
         <script type="text/javascript">
             function showModal(typingId) {
                 $('#<%= hfTypingId.ClientID %>').val(typingId);
                 $('#startTypingModal').modal('show');
+            }
+
+            function validateAndSubmit() {
+                var isValid = true;
+                var validationMessage = '';
+
+                var studentName = $('#<%= studentName.ClientID %>').val().trim();
+                var mobileNo = $('#<%= mobileNo.ClientID %>').val().trim();
+
+                if (studentName === '') {
+                    isValid = false;
+                    validationMessage += 'Please enter your name.<br>';
+                }
+                if (mobileNo === '') {
+                    isValid = false;
+                    validationMessage += 'Please enter your mobile number.<br>';
+                }
+
+                if (isValid) {
+                    $('#<%= start_typing.ClientID %>').click();
+                } else {
+                    $('#validationMessage').html(validationMessage).show();
+                }
             }
 
             function pageLoad(sender, args) {
