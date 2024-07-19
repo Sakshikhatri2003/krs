@@ -7,18 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Typing Tests | KRS Academy</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-    <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
-    <!-- Custom styles -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="hold-transition layout-top-nav" oncontextmenu="return false;">
     <form class="col-md-12" runat="server">
         <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
         <div class="wrapper">
-            <!-- Navbar -->
             <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item d-none d-sm-inline-block">
@@ -31,10 +27,12 @@
                 <div class="container">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <span class="nav-label">Total words:</span> <span id="totalWords">0</span>
+                            <span class="nav-label">Total words:</span> <span id="totalsWords">
+                                <asp:Label ID="totalWords" runat="server"></asp:Label></span>
                         </li>
                         <li class="nav-item">
-                            <span class="nav-label">Current Typing words:</span> <span id="currentWords">0</span>
+                            <span class="nav-label">Current Typing words:</span> <span id="currentsWords">
+                                <asp:Label ID="currentWords" runat="server"></asp:Label></span>
                         </li>
                         <li class="nav-item">
                             <asp:Label ID="lblTimeResult" Style="color: green;" runat="server"></asp:Label>
@@ -42,11 +40,7 @@
                     </ul>
                 </div>
             </nav>
-            <!-- /.navbar -->
-
-            <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
-                <!-- Setting Box -->
                 <div class="card first mt-3">
                     <div class="card-body">
                         <div class="backspace-container">
@@ -73,7 +67,7 @@
                         <div class="backspace-container">
                             <label for="backspaceSwitch" style="margin-right: 10px;">Backspace:</label>
                             <label>
-                                <asp:CheckBox ID="chk" Style="margin-top: 5px;" runat="server" AutoPostBack="true" />
+                                <asp:CheckBox ID="chk" Style="margin-top: 5px;" runat="server" AutoPostBack="true" OnClientClick="toggleBackspaceCount(this);" />
                                 Count:
                                 <asp:Label ID="backspace" runat="server"></asp:Label>
                             </label>
@@ -81,17 +75,14 @@
                         <br>
                         <div class="backspace-container">
                             <h5 style="margin-right: 10px;">Font Size:</h5>
-                            <button class="btn btn-danger btn-sm mx-1" onclick="changeFontSize('increase')" id="inc">+</button>
-                            <button class="btn btn-danger btn-sm mx-1" onclick="changeFontSize('decrease')" id="dec">-</button>
+                            <button class="btn btn-danger btn-sm mx-1" type="button" onclick="changeFontSize('increase')" id="inc">+</button>
+                            <button class="btn btn-danger btn-sm mx-1" type="button" onclick="changeFontSize('decrease')" id="dec">-</button>
                         </div>
                         <br>
-                        <asp:Button class="btn btn-success mx-2 btn-sm" runat="server" Text="Start Typing" ID="startTypingButton" OnClick="startTypingButton_Click" />
-                        <button class="btn btn-primary btn-sm" onclick="toggleFullScreen()">Exam Mode</button>
+                        <asp:Button class="btn btn-success mx-2 btn-sm" runat="server" Text="Start Typing" ID="startTypingButton" OnClientClick="return enableReadOnly();" OnClick="startTypingButton_Click" />
+                        <button class="btn btn-primary btn-sm" type="button" onclick="toggleFullScreen()">Exam Mode</button>
                     </div>
                 </div>
-                <!-- Setting Box End -->
-
-                <!-- Typing Section -->
                 <div class="typing" id="typingDiv">
                     <div class="typing-area">
                         <div class="sentence-container">
@@ -100,18 +91,12 @@
                             </p>
                         </div>
                         <asp:TextBox ID="input_text" class="form-control mt-2 hindiFont" runat="server" TextMode="MultiLine" Rows="8" Style="font-family: 'Tiro Devanagari Hindi'; width: 100%;" OnTextChanged="input_text_TextChanged"></asp:TextBox>
-                        <asp:Button ID="submit_button" Text="Submit" runat="server" class="btn btn-primary mt-2 mb-2" OnClick="submit_button_Click" />
+                        <asp:Button ID="submit_button" Text="Submit" runat="server" class="btn btn-primary mt-2 mb-2" OnClick="submit_button_Click" Enabled="false" />
                         <asp:HiddenField ID="lblTyped" runat="server" />
                     </div>
                 </div>
-                <!-- /.content-wrapper -->
-
-                <!-- Control Sidebar -->
-                <aside class="control-sidebar control-sidebar-dark">
-                    <!-- Control sidebar content goes here -->
-                </aside>
-                <!-- /.control-sidebar -->
             </div>
+            <aside class="control-sidebar control-sidebar-dark"></aside>
         </div>
         <script src="plugins/jquery/jquery.min.js"></script>
         <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -120,50 +105,112 @@
         <script src="plugins/toastr/toastr.min.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                const textInput = document.getElementById('<%=input_text.ClientID%>');
-                const backspaceCountDisplay = document.getElementById('<%=backspace.ClientID%>');
+                const inputTextElement = document.getElementById('<%= input_text.ClientID %>');
+                const currentWordsElement = document.getElementById('<%= currentWords.ClientID %>');
+                const backspaceCountDisplay = document.getElementById('<%= backspace.ClientID %>');
+                const lblTimeResultElement = document.getElementById('<%= lblTimeResult.ClientID %>');
+
+                inputTextElement.addEventListener('input', updateCurrentWordsCount);
+                inputTextElement.addEventListener('keydown', countBackspaces);
+
                 let backspaceCount = 0;
-                let typingSpeed = 0;
-                var ch = Boolean(document.getElementById("chk").checked);
+                let startTime;
 
-                textInput.addEventListener('keydown', function (event) {
+                function updateCurrentWordsCount() {
+                    const text = inputTextElement.value.trim();
+                    const totalCharacters = text.length;
+                    const totalWords = totalCharacters / 5;
+
+                    currentWordsElement.textContent = totalWords.toFixed(0);
+                }
+
+                function countBackspaces(event) {
                     if (event.key === 'Backspace') {
-                        if (ch) {
-                            backspaceCount++;
-                            backspaceCountDisplay.textContent = backspaceCount;
-                        }
+                        backspaceCount++;
+                        backspaceCountDisplay.textContent = backspaceCount;
                     }
-                });
+                }
 
-                var startTime;
-                var wordCount = 0;
+                function enableReadOnly() {
+                    inputTextElement.readOnly = false;
+                    inputTextElement.value = "";
+                    inputTextElement.focus();
+                    startTime = new Date();
+                    return false;
+                }
 
-                $(document).ready(function () {
-                    var inputTextId = '<%= input_text.ClientID %>';
-                    var lblTimeResultId = '<%= lblTimeResult.ClientID %>';
-
-                    $('#' + inputTextId).on('input', function () {
-                        if (!startTime) {
-                            startTime = new Date();
-                        }
-                        updateTypingSpeed(inputTextId, lblTimeResultId);
-                    });
-
-                    $('#submit_button').on('click', function () {
-                        sendStatsToServer(backspaceCount, wordCount, typingSpeed);
-                    });
-                });
-
-                function updateTypingSpeed(inputTextId, lblTimeResultId) {
-                    var endTime = new Date();
-                    var durationInSeconds = (endTime - startTime) / 1000;
-
-                    var text = $('#' + inputTextId).val().trim();
-                    wordCount = text.split(/\s+/).length;
+                function updateTypingSpeed() {
+                    const endTime = new Date();
+                    const durationInSeconds = (endTime - startTime) / 1000;
+                    const text = inputTextElement.value.trim();
+                    const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
 
                     if (durationInSeconds > 0) {
-                        typingSpeed = (wordCount / durationInSeconds) * 60;
-                        $('#' + lblTimeResultId).text('Your typing speed is approximately ' + typingSpeed.toFixed(2) + ' words per minute.');
+                        const wpm = (wordCount / durationInSeconds) * 60;
+                        const speedText = 'Your typing speed is approximately <b>' + wpm.toFixed(2) + ' words per minute</b>.';
+
+                        // Output the speed to lblTimeResult
+                        lblTimeResultElement.innerHTML = speedText;
+
+                        // Change font color based on typing speed
+                        if (wpm < 50) {
+                            lblTimeResultElement.style.color = 'red';
+                        } else {
+                            lblTimeResultElement.style.color = 'green';
+                        }
+                    }
+                }
+
+                inputTextElement.addEventListener('input', updateTypingSpeed);
+
+                function updateTotalWordsCount() {
+                    const sentenceElement = document.getElementById('<%= input_text.ClientID %>');
+                    const totalWordsElement = document.getElementById('<%= totalWords.ClientID %>');
+
+                    const text = sentenceElement.value.trim();
+                    const totalCharacters = text.length;
+                    const totalWords = totalCharacters / 5;
+
+                    totalWordsElement.textContent = totalWords.toFixed(0);
+                }
+
+                document.addEventListener('DOMContentLoaded', updateTotalWordsCount);
+
+                function changeFontSize(action) {
+                    const inputText = document.getElementById('<%= input_text.ClientID %>');
+                    const currentFontSize = window.getComputedStyle(inputText).fontSize;
+                    const currentFontSizeValue = parseFloat(currentFontSize);
+
+                    if (action === 'increase') {
+                        inputText.style.fontSize = (currentFontSizeValue + 1) + 'px';
+                    } else if (action === 'decrease') {
+                        inputText.style.fontSize = (currentFontSizeValue - 1) + 'px';
+                    }
+                }
+
+                function toggleFullScreen() {
+                    const elem = document.documentElement;
+
+                    if (!document.fullscreenElement) {
+                        if (elem.requestFullscreen) {
+                            elem.requestFullscreen();
+                        } else if (elem.mozRequestFullScreen) {
+                            elem.mozRequestFullScreen();
+                        } else if (elem.webkitRequestFullscreen) {
+                            elem.webkitRequestFullscreen();
+                        } else if (elem.msRequestFullscreen) {
+                            elem.msRequestFullscreen();
+                        }
+                    } else {
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen();
+                        } else if (document.mozCancelFullScreen) {
+                            document.mozCancelFullScreen();
+                        } else if (document.webkitExitFullscreen) {
+                            document.webkitExitFullscreen();
+                        } else if (document.msExitFullscreen) {
+                            document.msExitFullscreen();
+                        }
                     }
                 }
 
@@ -193,79 +240,6 @@
                     toastr.error('Insert failed');
                 });
             }
-
-            function toggleFullScreen() {
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen();
-                } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    }
-                }
-            }
-
-            function changeFontSize(action) {
-                var sentenceElement = document.getElementById('<%= input.ClientID %>');
-                var inputTextElement = document.getElementById('<%= input_text.ClientID %>');
-
-                var currentFontSize = parseFloat(window.getComputedStyle(sentenceElement, null).getPropertyValue('font-size'));
-                var inputTextFontSize = parseFloat(window.getComputedStyle(inputTextElement, null).getPropertyValue('font-size'));
-
-                if (action === 'increase') {
-                    sentenceElement.style.fontSize = (currentFontSize + 1) + 'px';
-                    inputTextElement.style.fontSize = (inputTextFontSize + 1) + 'px';
-                } else if (action === 'decrease') {
-                    sentenceElement.style.fontSize = (currentFontSize - 1) + 'px';
-                    inputTextElement.style.fontSize = (inputTextFontSize - 1) + 'px';
-                }
-            }
-
-            var startTime;
-            var wordCount = 0;
-
-            $(document).ready(function () {
-                $('#<%= input_text.ClientID %>').on('input', function () {
-                    if (!startTime) {
-                        startTime = new Date();
-                    }
-                    updateTypingSpeed();
-                    updateCurrentWordsCount();
-                    updateTotalWordsCount();
-                });
-            });
-
-            function updateTypingSpeed() {
-                var endTime = new Date();
-                var durationInSeconds = (endTime - startTime) / 1000;
-
-                var text = $('#<%= input_text.ClientID %>').val().trim();
-                var words = text.split(/\s+/);
-
-                var speed = (words.length / durationInSeconds) * 60;
-                $('#currentWords').text(words.length);
-                $('#totalWords').text(wordCount);
-            }
-
-            function updateCurrentWordsCount() {
-                var text = $('#<%= input_text.ClientID %>').val().trim();
-                var words = text.split(/\s+/);
-                $('#currentWords').text(words.length);
-            }
-
-            function updateTotalWordsCount() {
-                var text = $('#<%= input.ClientID %>').text().trim();
-                var words = text.split(/\s+/);
-                wordCount = words.length;
-                $('#totalWords').text(wordCount);
-            }
-
-            $(document).on('keydown', function (event) {
-                if (event.which === 8) {
-                    $('#backspace').text(function (i, oldval) {
-                        return ++oldval;
-                    });
-                }
-            });
         </script>
     </form>
 </body>

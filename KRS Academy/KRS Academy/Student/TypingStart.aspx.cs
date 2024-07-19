@@ -52,9 +52,9 @@ namespace KRS_Academy
 
         protected void startTypingButton_Click(object sender, EventArgs e)
         {
+            submit_button.Enabled = true;
             count.Enabled = true;
             remainingTime = Convert.ToInt32(timeSelector.SelectedValue) * 60;
-            input_text.ReadOnly = false;
             input_text.Focus();
             UpdateTimerLabel();
         }

@@ -54,6 +54,7 @@ namespace KRS_Academy.Student
                                "SELECT SCOPE_IDENTITY();";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
+                    conn.Open();    
                     cmd.Parameters.AddWithValue("@Date", DateTime.Now.Date);
                     cmd.Parameters.AddWithValue("@Typing_id", hfTypingId.Value);
                     cmd.Parameters.AddWithValue("@StudentName", studentName.Text);
