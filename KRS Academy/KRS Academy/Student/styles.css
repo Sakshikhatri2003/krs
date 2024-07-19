@@ -105,11 +105,7 @@ input:checked + .slider {
     overflow-y: auto; /* Scroll bar if content is long */
 }
 
-#input-text {
-    font-family: 'Tiro Devanagari Hindi';
-    resize: none;
-    font-size: 20px;
-}
+
 
 .form-select-sm {
     width: 100px; /* Adjust the width as needed */
@@ -139,4 +135,14 @@ input:checked + .slider {
     top: 0;
     width: 100%;
     z-index: 1000; /* Ensures it is on top of other elements */
+}
+
+
+@font-face {
+    font-family: 'DevLys010Bold';
+    src: url('fonts/DevLys-010-Bold.ttf') format('truetype');
+}
+
+.hindi-font {
+    font-family: 'DevLys010Bold', sans-serif;
 }

@@ -14,18 +14,9 @@
     <!-- Custom styles -->
     <link rel="stylesheet" href="styles.css">
     <!-- Add Google Font for Hindi -->
-    <link rel="stylesheet" href="plugins/devnagri.css">
-    <link rel="stylesheet" href="plugins/hindi.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400&display=swap" rel="stylesheet">
-    <link href="plugins/Tiro_Devanagari_Hindi/OFL.txt" rel="stylesheet"/>
-    <link href="plugins/Tiro_Devanagari_Hindi/TiroDevanagariHindi-Italic.ttf"  rel="stylesheet"/>
-    <link href="plugins/Tiro_Devanagari_Hindi/TiroDevanagariHindi-Regular.ttf"  rel="stylesheet" />
-    <style>
-        .hindi-font {
-            font-family: 'Noto Sans Devanagari', sans-serif;
-            font-size: 16px;
-        }
-    </style>
+   
+   
+    
 </head>
 <body class="hold-transition layout-top-nav" oncontextmenu="return false;">
     <form class="col-md-12" runat="server">
