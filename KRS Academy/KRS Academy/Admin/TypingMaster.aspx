@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin/MainMaster.Master" AutoEventWireup="true" CodeBehind="TypingMaster.aspx.cs" Inherits="KRS_Academy.Admin.TypingMaster" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <link rel="stylesheet" href="styles.css">
     <form id="TypingForm" runat="server">
         <div class="container-fluid">
             <div class="row">
@@ -20,7 +21,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="noticeType">Language</label>
-                                        <asp:DropDownList class="form-control" runat="server" ID="languageDrp">
+                                        <asp:DropDownList class="form-control" runat="server" ID="languageDrp" AutoPostBack="true" OnSelectedIndexChanged="languageDrp_SelectedIndexChanged">
                                             <asp:ListItem Value="">Select Type</asp:ListItem>
                                             <asp:ListItem Value="1">Hindi</asp:ListItem>
                                             <asp:ListItem Value="0">English</asp:ListItem>
@@ -39,7 +40,9 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="noticeContent">Input Text</label>
-                                            <asp:TextBox class="form-control" runat="server" ID="Content" AutoPostBack="true" TextMode="MultiLine" OnTextChanged="Content_TextChanged" placeholder="Enter content"></asp:TextBox>
+                                            <asp:TextBox class="form-control" runat="server" ID="Content" AutoPostBack="true" TextMode="MultiLine" OnTextChanged="Content_TextChanged" placeholder="Enter content" Visible="true"></asp:TextBox>
+                                            <asp:TextBox class="form-control hindi-font" runat="server" ID="HindiContent1" AutoPostBack="true" TextMode="MultiLine" OnTextChanged="HindiContent1_TextChanged" placeholder="Enter content" Visible="false"></asp:TextBox>
+
                                         </div>
                                     </div>
                                 </div>

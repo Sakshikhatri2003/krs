@@ -33,7 +33,7 @@
                             <span class="nav-label">Current Typing words:</span> <span id="currentWords"></span>
                         </li>
                         <li class="nav-item">
-                            <asp:Label ID="lblTimeResult" Style="color: green;" runat="server"></asp:Label>
+                            <asp:Label ID="lblTimeResult" style="color:green" runat="server"></asp:Label>
                         </li>
                     </ul>
                 </div>
@@ -77,7 +77,7 @@
                             <button class="btn btn-danger btn-sm mx-1" type="button" onclick="changeFontSize('decrease')" id="dec">-</button>
                         </div>
                         <br>
-                        <asp:Button class="btn btn-success mx-2 btn-sm" runat="server" Text="Start Typing" ID="startTypingButton" OnClientClick="return enableReadOnly();" OnClick="startTypingButton_Click" />
+                        <asp:Button class="btn btn-success mx-2 btn-sm" runat="server" Text="Start Typing" ID="startTypingButton" OnClick="startTypingButton_Click" />
                         <button class="btn btn-primary btn-sm" type="button" onclick="toggleFullScreen()">Exam Mode</button>
                     </div>
                 </div>
@@ -88,7 +88,8 @@
                                 <asp:Label ID="input" CssClass="no-select" runat="server" Style="width: 100%;"></asp:Label>
                             </p>
                         </div>
-                        <asp:TextBox ID="input_text" class="form-control mt-2 hindiFont" runat="server" TextMode="MultiLine" ReadOnly="True" Rows="8" Style="font-family: 'Tiro Devanagari Hindi'; width: 100%;" OnTextChanged="input_text_TextChanged"></asp:TextBox>
+                        <b><asp:Label CssClass="no-select" runat="server" style="color:cornflowerblue;" Text="Start Typing From Here:"></asp:Label></b>
+                        <asp:TextBox ID="input_text" class="form-control mt-2 hindiFont" runat="server" TextMode="MultiLine" ReadOnly="True" Rows="8" Style="font-family: 'Tiro Devanagari Hindi'; width: 100%;"></asp:TextBox>
                         <asp:Button ID="submit_button" Text="Submit" runat="server" class="btn btn-primary mt-2 mb-2" OnClick="submit_button_Click" />
                         <asp:HiddenField ID="lblTyped" runat="server" />
                     </div>
@@ -102,16 +103,18 @@
         <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
         <script src="plugins/toastr/toastr.min.js"></script>
         <script>
+            var backspaceCount = 0;
+            var totalWords = 0;
+            var typingSpeed = 0;
+            var startTime;
+
             document.addEventListener('DOMContentLoaded', function () {
                 const textInput = document.getElementById('<%=input_text.ClientID%>');
                 const backspaceCountDisplay = document.getElementById('<%=backspace.ClientID%>');
 
-                let backspaceCount = 0;
-                
-                const ch = document.getElementById("chk").checked;
-
                 textInput.addEventListener('keydown', function (event) {
                     if (event.key === 'Backspace') {
+                        const ch = document.getElementById("chk").checked;
                         if (ch) {
                             backspaceCount++;
                             backspaceCountDisplay.textContent = backspaceCount;
@@ -122,86 +125,77 @@
 
             $(document).ready(function () {
                 const textInput = document.getElementById('<%=input_text.ClientID%>');
-                const backspaceCountDisplay = document.getElementById('<%=backspace.ClientID%>');
-                const submitButton = document.getElementById('<%= submit_button.ClientID %>');
+                const submitButton = document.getElementById('<%=submit_button.ClientID%>');
+                const startTypingButton = document.getElementById('<%=startTypingButton.ClientID%>');
+
                 submitButton.style.display = 'none';
                 textInput.readOnly = true;
-                document.getElementById('<%= startTypingButton.ClientID %>').addEventListener('click', function () {
+
+                startTypingButton.addEventListener('click', function () {
                     submitButton.style.display = 'block';
-                });
-
-                document.getElementById('<%= startTypingButton.ClientID %>').addEventListener('click', function () {
                     textInput.readOnly = false;
-                });
-            });
-
-            var startTime;
-            var wordCount = 0;
-
-            $(document).ready(function () {
-                var inputLabelId = '<%= input.ClientID %>';
-                var inputTextId = '<%= input_text.ClientID %>';
-                var lblTimeResultId = '<%= lblTimeResult.ClientID %>';
-                var currentWordsElement = document.getElementById('currentWords');
-
-                $('#' + inputTextId).on('input', function () {
-                    if (!startTime) {
-                        startTime = new Date();
-                    }
-                    updateTypingSpeed(inputTextId, lblTimeResultId);
-                    updateCurrentWordsCount(inputTextId, currentWordsElement);
-                    updateTotalWordsCount(inputLabelId);
+                    startTime = new Date();
                 });
 
-                $('#submit_button').on('click', function () {
+                textInput.addEventListener('input', function () {
+                    updateTypingSpeed();
+                    updateCurrentWordsCount();
+                });
+
+                submitButton.addEventListener('click', function () {
+                    updateTotalWordsCount();
                     sendStatsToServer(backspaceCount, totalWords, typingSpeed);
                 });
 
-                updateTotalWordsCount(inputLabelId);
+                updateTotalWordsCount();
             });
 
-            function updateTypingSpeed(inputTextId, lblTimeResultId) {
+            function updateTypingSpeed() {
                 var endTime = new Date();
                 var durationInSeconds = (endTime - startTime) / 1000;
-
-                var text = $('#' + inputTextId).val().trim();
-                wordCount = text.split(/\s+/).filter(function (word) { return word.length > 0; }).length;
+                var text = $('#<%=input_text.ClientID%>').val().trim();
+                var wordCount = text.split(/\s+/).filter(function (word) { return word.length > 0; }).length;
 
                 if (durationInSeconds > 0) {
                     typingSpeed = (wordCount / durationInSeconds) * 60;
                 }
 
-                $('#' + lblTimeResultId).text('Speed: ' + Math.round(typingSpeed) + ' WPM');
+                $('#<%=lblTimeResult.ClientID%>').text('Speed: ' + Math.round(typingSpeed) + ' WPM');
             }
 
-            function updateCurrentWordsCount(inputTextId, currentWordsElement) {
-                const text = document.getElementById(inputTextId).value.trim();
+            function updateCurrentWordsCount() {
+                const text = document.getElementById('<%=input_text.ClientID%>').value.trim();
                 const totalCharacters = text.length;
-                const totalWords = totalCharacters / 5;
-
-                currentWordsElement.textContent = totalWords.toFixed(0);
+                const currentWords = totalCharacters / 5;
+                document.getElementById('currentWords').textContent = currentWords.toFixed(0);
             }
 
-            function updateTotalWordsCount(inputLabelId) {
-                var sentenceElement = document.getElementById(inputLabelId);
+            function updateTotalWordsCount() {
+                var sentenceElement = document.getElementById('<%=input.ClientID%>');
                 var totalWordsElement = document.getElementById('totalWords');
-
                 var text = sentenceElement.textContent.trim();
-                var totalCharacters = text.length; // Count all characters, including spaces and punctuation
-                var totalWords = totalCharacters / 5; // Divide by 5
-
-                totalWordsElement.textContent = totalWords.toFixed(0); // Round to nearest whole number
+                var totalCharacters = text.length;
+                totalWords = totalCharacters / 5;
+                totalWordsElement.textContent = totalWords.toFixed(0);
             }
 
-            function sendStatsToServer(backspaceCount, wordCount, typingSpeed) {
+            function sendStatsToServer(backspaceCount, totalWords, typingSpeed) {
+                console.log('Sending stats:', {
+                    backspaceCount: backspaceCount,
+                    totalWords: totalWords,
+                    typingSpeed: Math.round(typingSpeed)
+                });
+
                 $.ajax({
                     type: 'POST',
-                    url: 'TypingStart.aspx',
-                    data: {
+                    url: 'TypingStart.aspx/SaveStats',
+                    data: JSON.stringify({
                         backspaceCount: backspaceCount,
-                        wordCount: wordCount,
-                        typingSpeed: typingSpeed
-                    },
+                        totalWords: parseInt(totalWords, 10),
+                        typingSpeed: Math.round(typingSpeed)
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
                     success: function (response) {
                         console.log('Stats sent successfully');
                     },
@@ -212,7 +206,7 @@
             }
 
             function changeFontSize(action) {
-                var sentenceElement = document.getElementById('<%= input.ClientID %>');
+                var sentenceElement = document.getElementById('<%=input.ClientID%>');
                 var inputTextElement = document.getElementById('<%=input_text.ClientID%>');
 
                 var currentFontSize = parseFloat(window.getComputedStyle(sentenceElement, null).getPropertyValue('font-size'));
@@ -228,14 +222,11 @@
             }
 
             function toggleFullScreen() {
-
                 if (document.fullscreenElement) {
                     document.exitFullscreen();
                 } else {
                     document.documentElement.requestFullscreen();
                 }
-
-
             }
         </script>
     </form>

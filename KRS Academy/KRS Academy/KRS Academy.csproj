@@ -1992,6 +1992,7 @@
     <Content Include="Admin\plugins\uplot\uPlot.iife.js" />
     <Content Include="Admin\plugins\uplot\uPlot.iife.min.js" />
     <Content Include="Admin\plugins\uplot\uPlot.min.css" />
+    <Content Include="Admin\styles.css" />
     <Content Include="Admin\TypingMaster.aspx" />
     <Content Include="dist\css\adminlte.css" />
     <Content Include="dist\css\adminlte.min.css" />
@@ -6073,6 +6074,7 @@
     <Content Include="dist\js\.eslintrc.json" />
     <Content Include="dist\js\adminlte.js.map" />
     <Content Include="dist\js\adminlte.min.js.map" />
+    <Content Include="Admin\fonts\DevLys-010-Bold.ttf" />
     <None Include="packages.config" />
     <Content Include="Admin\plugins\bootstrap-colorpicker\css\bootstrap-colorpicker.css.map" />
     <Content Include="Admin\plugins\bootstrap-colorpicker\css\bootstrap-colorpicker.min.css.map" />
@@ -6449,6 +6451,7 @@
     <Content Include="plugins\toastr\toastr.js.map" />
     <Content Include="Student\plugins\Tiro_Devanagari_Hindi\TiroDevanagariHindi-Italic.ttf" />
     <Content Include="Student\plugins\Tiro_Devanagari_Hindi\TiroDevanagariHindi-Regular.ttf" />
+    <Content Include="Student\fonts\DevLys-010-Bold.ttf" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

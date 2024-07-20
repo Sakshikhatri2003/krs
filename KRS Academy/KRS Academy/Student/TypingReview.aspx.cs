@@ -56,6 +56,10 @@ namespace KRS_Academy
                 {
                     stuName.Text = Session["StuName"].ToString();
                 }
+                if (Session["Input"] != null)
+                {
+                    input.Text = Session["Input"].ToString();
+                }
 
                 if (!string.IsNullOrEmpty(Request.QueryString["Id"]))
                 {
@@ -70,6 +74,7 @@ namespace KRS_Academy
             string query = @"
                 SELECT 
                     tm.StudentName, 
+                    r.Input_text,
                     r.SkippedWord, 
                     r.Backspace, 
                     r.TimeAlloted, 
@@ -98,6 +103,7 @@ namespace KRS_Academy
                     if (reader.Read())
                     {
                         stuName.Text = reader["StudentName"].ToString();
+                        input.Text = reader["Input_text"].ToString();
                         SkippedWord.Text = reader["SkippedWord"].ToString();
                         Backspace.Text = reader["Backspace"].ToString();
                         TimeAllocate.Text = reader["TimeAlloted"].ToString();

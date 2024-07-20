@@ -253,6 +253,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
                 <div class="inner-card">
                     <div class="card-body">
+                        <p runat="server" class="card-text">
+                            <label>Given by Us: </label><br />
+                            <asp:Label ID="input" style="color:green" runat="server" />
+                        </p>
+                        <label>Written by you: </label>
                         <p id="LblResult" runat="server" class="card-text">
                             <asp:Label ID="LblResult1" runat="server" />
                         </p>

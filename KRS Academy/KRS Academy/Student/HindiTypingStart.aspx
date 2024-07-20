@@ -99,7 +99,7 @@
                 <div class="typing" id="typingDiv">
                     <div class="typing-area">
                         <div class="sentence-container">
-                            <p id="sentence">
+                            <p id="sentence" class="hindi-font" >
                                 <asp:Label ID="input" CssClass="no-select" runat="server" Style="width: 100%;"></asp:Label>
                             </p>
                         </div>

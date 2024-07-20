@@ -60,6 +60,15 @@ namespace KRS_Academy.Admin
         protected global::System.Web.UI.WebControls.TextBox Content;
 
         /// <summary>
+        /// HindiContent1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox HindiContent1;
+
+        /// <summary>
         /// WordsNo control.
         /// </summary>
         /// <remarks>

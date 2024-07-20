@@ -19,7 +19,6 @@ namespace KRS_Academy
         {
             if (SiteSession.IsExamStart)
             {
-
                 if (!IsPostBack)
                 {
                     submit_button.Style["display"] = "none";
@@ -48,22 +47,30 @@ namespace KRS_Academy
             else
             {
                 Response.Redirect("Typing.aspx", false);
-
             }
         }
 
         [WebMethod]
         public static void SaveStats(int backspaceCount, int totalWords, string typingSpeed)
         {
-            HttpContext.Current.Session["BackspaceCount"] = backspaceCount;
-            HttpContext.Current.Session["WordCount"] = totalWords;
-            HttpContext.Current.Session["TypingSpeed"] = typingSpeed;
+            try
+            {
+                HttpContext.Current.Session["BackspaceCount"] = backspaceCount;
+                HttpContext.Current.Session["WordCount"] = totalWords;
+                HttpContext.Current.Session["TypingSpeed"] = typingSpeed;
+            }
+            catch (Exception ex)
+            {
+                HttpContext.Current.Session["Error"] = ex.Message;
+            }
         }
+
 
         protected void startTypingButton_Click(object sender, EventArgs e)
         {
             count.Enabled = true;
             remainingTime = Convert.ToInt32(timeSelector.SelectedValue) * 60;
+            input_text.ReadOnly = false; // Ensure this is set here
             input_text.Focus();
             UpdateTimerLabel();
         }
@@ -91,11 +98,6 @@ namespace KRS_Academy
             timer.Text = $"{minutes:00}:{seconds:00}";
         }
 
-        protected void input_text_TextChanged(object sender, EventArgs e)
-        {
-            // Handle text changed event if needed
-        }
-
         protected void submit_button_Click(object sender, EventArgs e)
         {
             count.Enabled = false;
@@ -109,7 +111,7 @@ namespace KRS_Academy
 
             double similarityScore = CompareParagraphs(paragraph1, paragraph2);
             string highlightedText = HighlightDifferentWords(paragraph1, paragraph2);
-            string result = $"<br />{highlightedText}";
+            string result = $"{highlightedText}";
 
             int allottedTimeInSeconds = Convert.ToInt32(timeSelector.SelectedValue) * 60;
             int timeTakenInSeconds = allottedTimeInSeconds - remainingTime;
@@ -145,7 +147,7 @@ namespace KRS_Academy
             }
 
             double accuracyPercentage = (double)correctWords / originalWords.Length * 100;
-            Session["Accuracy"] = similarityScore;
+            Session["Accuracy"] = accuracyPercentage.ToString("F2") + "%";
 
             Session["Speed"] = typingSpeed;
             Session["TimeAllote"] = timeSelector.SelectedValue;
@@ -155,6 +157,7 @@ namespace KRS_Academy
             Session["SkippedWords"] = skippedWords;
             Session["CorrectWords"] = correctWords;
             Session["WrongWords"] = wrongWords;
+            Session["Input"] = input.Text;
             Session["Result"] = result;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -250,14 +253,10 @@ namespace KRS_Academy
             double[] vector = new double[uniqueWords.Length];
             for (int i = 0; i < uniqueWords.Length; i++)
             {
-                vector[i] = termFrequency.ContainsKey(uniqueWords[i]) ? termFrequency[uniqueWords[i]] * CalculateIDF(termFrequency, uniqueWords[i]) : 0;
+                string word = uniqueWords[i];
+                vector[i] = termFrequency.ContainsKey(word) ? termFrequency[word] : 0;
             }
             return vector;
-        }
-
-        static double CalculateIDF(Dictionary<string, int> termFrequency, string word)
-        {
-            return Math.Log10((double)(1 + termFrequency.Values.Sum()) / (1 + termFrequency[word]));
         }
 
         static double CalculateCosineSimilarity(double[] vector1, double[] vector2)
@@ -269,14 +268,16 @@ namespace KRS_Academy
             for (int i = 0; i < vector1.Length; i++)
             {
                 dotProduct += vector1[i] * vector2[i];
-                magnitude1 += Math.Pow(vector1[i], 2);
-                magnitude2 += Math.Pow(vector2[i], 2);
+                magnitude1 += vector1[i] * vector1[i];
+                magnitude2 += vector2[i] * vector2[i];
             }
 
-            magnitude1 = Math.Sqrt(magnitude1);
-            magnitude2 = Math.Sqrt(magnitude2);
+            if (magnitude1 == 0 || magnitude2 == 0)
+            {
+                return 0;
+            }
 
-            return dotProduct / (magnitude1 * magnitude2);
+            return dotProduct / (Math.Sqrt(magnitude1) * Math.Sqrt(magnitude2));
         }
     }
 }

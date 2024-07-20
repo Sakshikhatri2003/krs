@@ -158,5 +158,31 @@ namespace KRS_Academy.Admin
             }
             BindGrid();
         }
+
+        protected void languageDrp_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (languageDrp.SelectedValue == "1")
+            {
+                Content.Visible = false;
+                HindiContent1.Visible = true;
+            }
+            else if (languageDrp.SelectedValue == "0")
+            {
+                Content.Visible = true;
+                HindiContent1.Visible = false;
+            }
+            else
+            {
+                Content.Visible = true;
+                HindiContent1.Visible = false;
+            }
+        }
+
+        protected void HindiContent1_TextChanged(object sender, EventArgs e)
+        {
+            string content = HindiContent1.Text;
+            int wordCount = content.Split(new char[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Length;
+            WordsNo.Text = wordCount.ToString() + " Word";
+        }
     }
 }

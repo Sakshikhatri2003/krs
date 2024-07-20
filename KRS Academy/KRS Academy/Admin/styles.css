@@ -1,0 +1,10 @@
+﻿
+
+@font-face {
+    font-family: 'DevLys010Bold';
+    src: url('fonts/DevLys-010-Bold.ttf') format('truetype');
+}
+
+.hindi-font {
+    font-family: 'DevLys010Bold', sans-serif;
+}
