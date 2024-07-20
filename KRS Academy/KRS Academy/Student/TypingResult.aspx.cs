@@ -11,6 +11,7 @@ namespace KRS_Academy.Student
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            SiteSession.IsExamStart = false;
             if (!IsPostBack)
             {
                 LoadData();

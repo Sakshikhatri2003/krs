@@ -9,6 +9,7 @@ namespace KRS_Academy
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            SiteSession.IsExamStart = false;
             if (!IsPostBack)
             {
                 if (Session["Accuracy"] != null)

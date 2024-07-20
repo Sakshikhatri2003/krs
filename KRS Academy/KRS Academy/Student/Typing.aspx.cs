@@ -64,6 +64,7 @@ namespace KRS_Academy.Student
                         Session["StuName"] = studentName.Text;
                         Session["TestId"] = newTestId;
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "toastrSuccess", "toastr.success('Data inserted successfully.');", true);
+                        SiteSession.IsExamStart = true;
                         Response.Redirect("TypingStart.aspx?Id=" + hfTypingId.Value, false);
                         Context.ApplicationInstance.CompleteRequest();
                     }

@@ -33,24 +33,6 @@ namespace KRS_Academy
         protected global::System.Web.UI.WebControls.Label TestName;
 
         /// <summary>
-        /// totalWords control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label totalWords;
-
-        /// <summary>
-        /// currentWords control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label currentWords;
-
-        /// <summary>
         /// lblTimeResult control.
         /// </summary>
         /// <remarks>

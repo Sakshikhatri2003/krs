@@ -17,42 +17,51 @@ namespace KRS_Academy
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (SiteSession.IsExamStart)
             {
-                if (!string.IsNullOrEmpty(Request.QueryString["Id"]))
+
+                if (!IsPostBack)
                 {
-                    int id = Convert.ToInt32(Request.QueryString["Id"]);
-                    string query = "SELECT TestName, InputText FROM TypingMaster WHERE TypingId = @Id";
-
-                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    submit_button.Style["display"] = "none";
+                    if (!string.IsNullOrEmpty(Request.QueryString["Id"]))
                     {
-                        SqlCommand command = new SqlCommand(query, connection);
-                        command.Parameters.AddWithValue("@Id", id);
+                        int id = Convert.ToInt32(Request.QueryString["Id"]);
+                        string query = "SELECT TestName, InputText FROM TypingMaster WHERE TypingId = @Id";
 
-                        connection.Open();
-                        SqlDataReader reader = command.ExecuteReader();
-                        if (reader.Read())
+                        using (SqlConnection connection = new SqlConnection(connectionString))
                         {
-                            input.Text = reader["InputText"].ToString();
-                            TestName.Text = reader["TestName"].ToString();
+                            SqlCommand command = new SqlCommand(query, connection);
+                            command.Parameters.AddWithValue("@Id", id);
+
+                            connection.Open();
+                            SqlDataReader reader = command.ExecuteReader();
+                            if (reader.Read())
+                            {
+                                input.Text = reader["InputText"].ToString();
+                                TestName.Text = reader["TestName"].ToString();
+                            }
                         }
                     }
+                    count.Enabled = false;
                 }
-                count.Enabled = false;
+            }
+            else
+            {
+                Response.Redirect("Typing.aspx", false);
+
             }
         }
 
         [WebMethod]
-        public static void SaveStats(int backspaceCount, int wordCount, string typingSpeed)
+        public static void SaveStats(int backspaceCount, int totalWords, string typingSpeed)
         {
             HttpContext.Current.Session["BackspaceCount"] = backspaceCount;
-            HttpContext.Current.Session["WordCount"] = wordCount;
+            HttpContext.Current.Session["WordCount"] = totalWords;
             HttpContext.Current.Session["TypingSpeed"] = typingSpeed;
         }
 
         protected void startTypingButton_Click(object sender, EventArgs e)
         {
-            submit_button.Enabled = true;
             count.Enabled = true;
             remainingTime = Convert.ToInt32(timeSelector.SelectedValue) * 60;
             input_text.Focus();
@@ -109,9 +118,9 @@ namespace KRS_Academy
             int secondsTaken = timeTakenInSeconds % 60;
             string timeTakenFormatted = $"{minutesTaken:00}:{secondsTaken:00}";
 
-            int backspaceCount = (int)Session["BackspaceCount"];
-            int wordCount = (int)Session["WordCount"];
-            string typingSpeed = Session["TypingSpeed"].ToString();
+            int backspaceCount = Session["BackspaceCount"] != null ? (int)Session["BackspaceCount"] : 0;
+            int wordCount = Session["WordCount"] != null ? (int)Session["WordCount"] : 0;
+            string typingSpeed = Session["TypingSpeed"] != null ? Session["TypingSpeed"].ToString() : "";
 
             string[] originalWords = paragraph1.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
             string[] typedWords = paragraph2.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
@@ -136,7 +145,7 @@ namespace KRS_Academy
             }
 
             double accuracyPercentage = (double)correctWords / originalWords.Length * 100;
-            Session["Accuracy"] = accuracyPercentage.ToString("F2") + "%";
+            Session["Accuracy"] = similarityScore;
 
             Session["Speed"] = typingSpeed;
             Session["TimeAllote"] = timeSelector.SelectedValue;
@@ -166,7 +175,7 @@ namespace KRS_Academy
                     cmd.Parameters.AddWithValue("@GrossSpeed", typingSpeed);
                     cmd.Parameters.AddWithValue("@CorrectWord", correctWords);
                     cmd.Parameters.AddWithValue("@WrongWord", wrongWords);
-                    cmd.Parameters.AddWithValue("@Accuracy", accuracyPercentage); 
+                    cmd.Parameters.AddWithValue("@Accuracy", accuracyPercentage);
                     cmd.Parameters.AddWithValue("@Marks", DBNull.Value);
 
                     try

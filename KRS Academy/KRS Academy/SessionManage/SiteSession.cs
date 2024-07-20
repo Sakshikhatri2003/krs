@@ -15,6 +15,10 @@ namespace WebApp.LIBS
             set { HttpContext.Current.Session["IsLoggedIn"] = value; }
         }
 
-       
+        public static bool IsExamStart
+        {
+            get { return HttpContext.Current.Session["IsExamStart"] == null ? false : (bool)HttpContext.Current.Session["IsExamStart"]; }
+            set { HttpContext.Current.Session["IsExamStart"] = value; }
+        }
     }
 }
