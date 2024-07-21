@@ -98,5 +98,7 @@
                 table.search($('#txtSearch').val()).draw();
             }
         </script>
+
     </form>
 </asp:Content>
+ntent>

@@ -44,10 +44,10 @@ namespace KRS_Academy.Student
         }
 
         [WebMethod]
-        public static void SaveStats(int backspaceCount, int wordCount, string typingSpeed)
+        public static void SaveStats(int backspaceCount, int totalWords, string typingSpeed)
         {
             HttpContext.Current.Session["BackspaceCount"] = backspaceCount;
-            HttpContext.Current.Session["WordCount"] = wordCount;
+            HttpContext.Current.Session["WordCount"] = totalWords;
             HttpContext.Current.Session["TypingSpeed"] = typingSpeed;
         }
 
@@ -101,7 +101,7 @@ namespace KRS_Academy.Student
 
             double similarityScore = CompareParagraphs(paragraph1, paragraph2);
             string highlightedText = HighlightDifferentWords(paragraph1, paragraph2);
-            string result = $"<br />{highlightedText}";
+            string result = $"{highlightedText}";
 
             int allottedTimeInSeconds = Convert.ToInt32(timeSelector.SelectedValue) * 60;
             int timeTakenInSeconds = allottedTimeInSeconds - remainingTime;
@@ -110,22 +110,26 @@ namespace KRS_Academy.Student
             int secondsTaken = timeTakenInSeconds % 60;
             string timeTakenFormatted = $"{minutesTaken:00}:{secondsTaken:00}";
 
-            int backspaceCount = (int)Session["BackspaceCount"];
-            int wordCount = (int)Session["WordCount"];
-            string typingSpeed = Session["TypingSpeed"].ToString();
+            int backspaceCount = Session["BackspaceCount"] != null ? (int)Session["BackspaceCount"] : 0;
+            int wordCount = Session["WordCount"] != null ? (int)Session["WordCount"] : 0;
+            string typingSpeed = Session["TypingSpeed"] != null ? Session["TypingSpeed"].ToString() : "";
 
-            string[] originalWords = paragraph1.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
-            string[] typedWords = paragraph2.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+            // Calculate word counts for Hindi
+            int totalWords = CountWordsInHindi(paragraph1);
+            int typedWords = CountWordsInHindi(paragraph2);
 
-            int skippedWords = Math.Max(0, originalWords.Length - typedWords.Length);
+            int skippedWords = Math.Max(0, totalWords - typedWords);
             int correctWords = 0;
             int wrongWords = 0;
 
-            for (int i = 0; i < typedWords.Length; i++)
+            string[] originalWords = SplitHindiText(paragraph1);
+            string[] typedWordsArray = SplitHindiText(paragraph2);
+
+            for (int i = 0; i < typedWordsArray.Length; i++)
             {
                 if (i < originalWords.Length)
                 {
-                    if (originalWords[i].Equals(typedWords[i], StringComparison.OrdinalIgnoreCase))
+                    if (originalWords[i].Equals(typedWordsArray[i], StringComparison.OrdinalIgnoreCase))
                         correctWords++;
                     else
                         wrongWords++;
@@ -136,7 +140,7 @@ namespace KRS_Academy.Student
                 }
             }
 
-            double accuracyPercentage = (double)correctWords / originalWords.Length * 100;
+            double accuracyPercentage = Math.Round((double)correctWords / originalWords.Length * 100, 2);
             Session["Accuracy"] = accuracyPercentage.ToString("F2") + "%";
 
             Session["Speed"] = typingSpeed;
@@ -147,7 +151,20 @@ namespace KRS_Academy.Student
             Session["SkippedWords"] = skippedWords;
             Session["CorrectWords"] = correctWords;
             Session["WrongWords"] = wrongWords;
+            Session["Input"] = input.Text;
             Session["Result"] = result;
+
+            int correctCharCount = 0;
+            for (int i = 0; i < Math.Min(paragraph1.Length, paragraph2.Length); i++)
+            {
+                if (paragraph1[i] == paragraph2[i])
+                {
+                    correctCharCount++;
+                }
+            }
+
+            int marks = correctCharCount / 5;
+            Session["Marks"] = marks;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -157,18 +174,18 @@ namespace KRS_Academy.Student
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Test_id", Session["TestId"]);
-                    cmd.Parameters.AddWithValue("@Input_text", input.Text);
+                    cmd.Parameters.AddWithValue("@Input_text", paragraph1);
                     cmd.Parameters.AddWithValue("@Result_text", highlightedText);
                     cmd.Parameters.AddWithValue("@SkippedWord", skippedWords);
                     cmd.Parameters.AddWithValue("@Backspace", backspaceCount);
                     cmd.Parameters.AddWithValue("@TimeAlloted", timeSelector.SelectedValue);
                     cmd.Parameters.AddWithValue("@TimeTaken", timeTakenFormatted);
-                    cmd.Parameters.AddWithValue("@TotalWords", wordCount);
+                    cmd.Parameters.AddWithValue("@TotalWords", totalWords);
                     cmd.Parameters.AddWithValue("@GrossSpeed", typingSpeed);
                     cmd.Parameters.AddWithValue("@CorrectWord", correctWords);
                     cmd.Parameters.AddWithValue("@WrongWord", wrongWords);
                     cmd.Parameters.AddWithValue("@Accuracy", accuracyPercentage);
-                    cmd.Parameters.AddWithValue("@Marks", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Marks", marks);
 
                     try
                     {
@@ -183,13 +200,23 @@ namespace KRS_Academy.Student
                 }
             }
 
-            Response.Redirect("TypingReview.aspx");
+            Response.Redirect("HindiTypingReview.aspx");
+        }
+
+        static string[] SplitHindiText(string text)
+        {
+            return text.Split(new[] { ' ', '.', ',', '!', '?', '।', '—', '॥' }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        static int CountWordsInHindi(string text)
+        {
+            return SplitHindiText(text).Length;
         }
 
         static string HighlightDifferentWords(string text1, string text2)
         {
-            string[] words1 = text1.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
-            string[] words2 = text2.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] words1 = SplitHindiText(text1);
+            string[] words2 = SplitHindiText(text2);
 
             HashSet<string> set1 = new HashSet<string>(words1);
 
@@ -206,8 +233,8 @@ namespace KRS_Academy.Student
 
         static double CompareParagraphs(string para1, string para2)
         {
-            string[] words1 = para1.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
-            string[] words2 = para2.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] words1 = SplitHindiText(para1);
+            string[] words2 = SplitHindiText(para2);
 
             var termFrequency1 = CalculateTermFrequency(words1);
             var termFrequency2 = CalculateTermFrequency(words2);
@@ -270,5 +297,6 @@ namespace KRS_Academy.Student
 
             return dotProduct / (magnitude1 * magnitude2);
         }
+
     }
 }

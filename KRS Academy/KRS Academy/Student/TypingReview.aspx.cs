@@ -14,7 +14,7 @@ namespace KRS_Academy
             {
                 if (Session["Accuracy"] != null)
                 {
-                    Accuracy.Text = Session["Accuracy"].ToString();
+                    Accuracy.Text = Session["Accuracy"].ToString() + "%";
                 }
                 if (Session["Speed"] != null)
                 {
@@ -60,6 +60,10 @@ namespace KRS_Academy
                 {
                     input.Text = Session["Input"].ToString();
                 }
+                if (Session["Marks"] != null)
+                {
+                    Marks.Text = Session["Marks"].ToString();
+                }
 
                 if (!string.IsNullOrEmpty(Request.QueryString["Id"]))
                 {
@@ -84,7 +88,8 @@ namespace KRS_Academy
                     r.CorrectWord, 
                     r.WrongWord, 
                     r.Accuracy, 
-                    r.Result_text
+                    r.Result_text,
+                    r.Marks
                 FROM 
                     Result r
                 JOIN 
@@ -112,8 +117,9 @@ namespace KRS_Academy
                         GrossSpeed.Text = reader["GrossSpeed"].ToString();
                         CorrectWords.Text = reader["CorrectWord"].ToString();
                         WrongWords.Text = reader["WrongWord"].ToString();
-                        Accuracy.Text = reader["Accuracy"].ToString();
-                        LblResult1.Text = reader["Result_text"].ToString();
+                        Accuracy.Text = reader["Accuracy"].ToString() + "%";
+                        LblResult.InnerHtml = reader["Result_text"].ToString();
+                        Marks.Text = reader["Marks"].ToString();
                     }
                     reader.Close();
                 }

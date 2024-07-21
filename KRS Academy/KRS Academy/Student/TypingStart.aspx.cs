@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -146,7 +147,7 @@ namespace KRS_Academy
                 }
             }
 
-            double accuracyPercentage = (double)correctWords / originalWords.Length * 100;
+            double accuracyPercentage = Math.Round((double)correctWords / originalWords.Length * 100, 2);
             Session["Accuracy"] = accuracyPercentage.ToString("F2") + "%";
 
             Session["Speed"] = typingSpeed;
@@ -160,6 +161,18 @@ namespace KRS_Academy
             Session["Input"] = input.Text;
             Session["Result"] = result;
 
+            int correctCharCount = 0;
+            for (int i = 0; i < Math.Min(paragraph1.Length, paragraph2.Length); i++)
+            {
+                if (paragraph1[i] == paragraph2[i])
+                {
+                    correctCharCount++;
+                }
+            }
+
+            int marks = correctCharCount / 5;
+            Session["Marks"] = marks;
+
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 string query = "INSERT INTO Result (Test_id, Input_text, Result_text, SkippedWord, Backspace, TimeAlloted, TimeTaken, TotalWords, GrossSpeed, CorrectWord, WrongWord, Accuracy, Marks) " +
@@ -168,8 +181,8 @@ namespace KRS_Academy
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Test_id", Session["TestId"]);
-                    cmd.Parameters.AddWithValue("@Input_text", input.Text);
-                    cmd.Parameters.AddWithValue("@Result_text", highlightedText);
+                    cmd.Parameters.Add("@Input_text", SqlDbType.NVarChar, 4000).Value = input.Text.Length > 4000 ? input.Text.Substring(0, 4000) : input.Text;
+                    cmd.Parameters.Add("@Result_text", SqlDbType.NVarChar, 4000).Value = highlightedText.Length > 4000 ? highlightedText.Substring(0, 4000) : highlightedText;
                     cmd.Parameters.AddWithValue("@SkippedWord", skippedWords);
                     cmd.Parameters.AddWithValue("@Backspace", backspaceCount);
                     cmd.Parameters.AddWithValue("@TimeAlloted", timeSelector.SelectedValue);
@@ -178,14 +191,15 @@ namespace KRS_Academy
                     cmd.Parameters.AddWithValue("@GrossSpeed", typingSpeed);
                     cmd.Parameters.AddWithValue("@CorrectWord", correctWords);
                     cmd.Parameters.AddWithValue("@WrongWord", wrongWords);
-                    cmd.Parameters.AddWithValue("@Accuracy", accuracyPercentage);
-                    cmd.Parameters.AddWithValue("@Marks", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Accuracy", accuracyPercentage );
+                    cmd.Parameters.AddWithValue("@Marks", marks);
 
                     try
                     {
                         conn.Open();
                         cmd.ExecuteNonQuery();
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "toastrSuccess", "toastr.success('Data inserted successfully.');", true);
+                        Response.Redirect("TypingReview.aspx");
                     }
                     catch (Exception ex)
                     {
@@ -193,8 +207,6 @@ namespace KRS_Academy
                     }
                 }
             }
-
-            Response.Redirect("TypingReview.aspx");
         }
 
         static string HighlightDifferentWords(string text1, string text2)
@@ -279,5 +291,6 @@ namespace KRS_Academy
 
             return dotProduct / (Math.Sqrt(magnitude1) * Math.Sqrt(magnitude2));
         }
+
     }
 }

@@ -103,6 +103,8 @@ namespace KRS_Academy.Admin
         {
             int typingId = Convert.ToInt32(hfTypingId.Value);
 
+            string inputText = (languageDrp.SelectedValue == "1") ? HindiContent1.Text : Content.Text;
+
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand("UpdateTypingMaster", conn))
@@ -110,11 +112,11 @@ namespace KRS_Academy.Admin
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@TypingId", typingId);
                     cmd.Parameters.AddWithValue("@Date", Date.Text);
-                    cmd.Parameters.AddWithValue("@Language", languageDrp.SelectedItem.Text); // Use SelectedItem.Text for the Language
+                    cmd.Parameters.AddWithValue("@Language", languageDrp.SelectedItem.Text); 
                     cmd.Parameters.AddWithValue("@TestName", testName.Text);
-                    cmd.Parameters.AddWithValue("@InputText", Content.Text);
+                    cmd.Parameters.AddWithValue("@InputText", inputText); 
                     cmd.Parameters.AddWithValue("@TotalWords", WordsNo.Text);
-                    cmd.Parameters.AddWithValue("@LanguageCode", int.Parse(languageDrp.SelectedValue)); // Assuming LanguageCode is an int
+                    cmd.Parameters.AddWithValue("@LanguageCode", int.Parse(languageDrp.SelectedValue)); 
 
                     try
                     {
@@ -133,7 +135,6 @@ namespace KRS_Academy.Admin
             update.Visible = false;
             BindGrid();
         }
-
         private void ClearForm()
         {
             Date.Text = "";
@@ -142,6 +143,8 @@ namespace KRS_Academy.Admin
             Content.Text = "";
             WordsNo.Text = "";
             hfTypingId.Value = "";
+            HindiContent1.Text = "";
+            Content.Visible = true;
         }
 
         protected void TypingTable_RowDeleting(object sender, GridViewDeleteEventArgs e)
