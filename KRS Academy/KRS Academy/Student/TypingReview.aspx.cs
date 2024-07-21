@@ -14,7 +14,7 @@ namespace KRS_Academy
             {
                 if (Session["Accuracy"] != null)
                 {
-                    Accuracy.Text = Session["Accuracy"].ToString() + "%";
+                    Accuracy.Text = Session["Accuracy"].ToString();
                 }
                 if (Session["Speed"] != null)
                 {

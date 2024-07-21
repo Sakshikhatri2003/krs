@@ -103,7 +103,8 @@
                                 <asp:Label ID="input" CssClass="no-select" runat="server" Style="width: 100%;"></asp:Label>
                             </p>
                         </div>
-                        <b><asp:Label CssClass="no-select" runat="server" style="color:cornflowerblue;" Text="यहां से टाइप करना शुरू करें:"></asp:Label></b>
+                        <b>
+                            <asp:Label CssClass="no-select" runat="server" Style="color: cornflowerblue;" Text="यहां से टाइप करना शुरू करें:"></asp:Label></b>
                         <asp:TextBox ID="input_text" CssClass="form-control mt-2 hindi-font" runat="server" TextMode="MultiLine" Rows="8" Style="width: 100%;" OnTextChanged="input_text_TextChanged"></asp:TextBox>
                         <asp:Button ID="submit_button" Text="Submit" runat="server" class="btn btn-primary mt-2 mb-2" OnClick="submit_button_Click" />
                         <asp:HiddenField ID="lblTyped" runat="server" />
@@ -186,28 +187,30 @@
             }
 
             function countWordsInHindi(text) {
-                // Split the text by spaces and filter out empty entries
                 return text.split(/\s+/).filter(function (word) { return word.length > 0; }).length;
             }
 
             function updateCurrentWordsCount() {
                 const text = document.getElementById('<%=input_text.ClientID%>').value.trim();
-                const currentWords = countWordsInHindi(text);
-                document.getElementById('currentWords').textContent = currentWords;
+                const currentWords = countAllCharacters(text) / 5;
+                document.getElementById('currentWords').textContent = currentWords.toFixed(0);
             }
 
             function updateTotalWordsCount() {
                 var sentenceElement = document.getElementById('<%=input.ClientID%>');
                 var totalWordsElement = document.getElementById('totalWords');
                 var text = sentenceElement.textContent.trim();
-                var totalWords = countWordsInHindi(text);
-                totalWordsElement.textContent = totalWords;
+                totalWords = countAllCharacters(text) / 5;
+                totalWordsElement.textContent = totalWords.toFixed(0);
+            }
+            function countAllCharacters(text) {
+                return text.length;
             }
 
             function sendStatsToServer(backspaceCount, totalWords, typingSpeed) {
                 console.log('Sending stats:', {
                     backspaceCount: backspaceCount,
-                    totalWords: totalWords,
+                    totalWords: parseInt(totalWords, 10),
                     typingSpeed: Math.round(typingSpeed)
                 });
 

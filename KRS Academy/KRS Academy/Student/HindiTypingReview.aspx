@@ -201,14 +201,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <div class="row">
                                     <div class="col option">
                                         <img src="images/check.png" alt="Correct" width="20" height="20">Skipped Words:  
-                      <h6>&nbsp;
-                          <asp:Label ID="SkippedWord" runat="server"></asp:Label></h6>
+                      &nbsp;
+                          <asp:Label ID="SkippedWord" runat="server"></asp:Label>
                                     </div>
                                     <div class="col option">
                                         <img src="images/check.png" alt="Incorrect" width="20" height="20">Total Backspace Pressed:
-                      <h6>&nbsp;
+                      &nbsp;
                           <asp:Label ID="Backspace" runat="server"></asp:Label>
-                          Times</h6>
+                          Times
                                     </div>
                                     <div class="col option">
                                         <img src="images/check.png" alt="Attempted" width="20" height="20">Total Time Allotted:
@@ -218,7 +218,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <div class="col option">
                                         <img src="images/check.png" alt="Unattempted" width="20" height="20">
                                         Time Taken:
-                      <h6>&nbsp;<asp:Label ID="TimeTaken" runat="server"></asp:Label></h6>
+                      &nbsp;<asp:Label ID="TimeTaken" runat="server"></asp:Label>
                                     </div>
 
                                 </div>
@@ -236,14 +236,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </div>
                                     <div class="col option">
                                         <img src="images/check.png" alt="Incorrect" width="20" height="20">Correct Characters:
-                      &nbsp<asp:Label ID="CorrectWords" runat="server"></asp:Label>
-                                        (0 Words)
+                      &nbsp<asp:Label ID="CorrectWords" runat="server"></asp:Label>&nbsp;
+                                        Words
                                     </div>
                                     <div class="col option">
                                         <img src="images/check.png" alt="Attempted" width="20" height="20">
                                         Wrong Characters:
-                      &nbsp;<asp:Label ID="WrongWords" runat="server"></asp:Label>
-                                        (0 Words)
+                      &nbsp;<asp:Label ID="WrongWords" runat="server"></asp:Label>&nbsp;
+                                        Words
                                     </div>
 
                                 </div>
@@ -254,7 +254,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       &nbsp;<asp:Label ID="Accuracy" runat="server"></asp:Label>
                                     </div>
                                     <div class="col option">
-                                        <img src="images/check.png" alt="Correct" width="20" height="20">Marks Out of 50 : 
+                                        <img src="images/check.png" alt="Correct" width="20" height="20">Marks : 
                       &nbsp;<asp:Label ID="Marks" runat="server"></asp:Label>
                                     </div>
                                     <div class="col option"></div>

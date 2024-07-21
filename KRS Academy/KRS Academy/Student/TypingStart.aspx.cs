@@ -162,12 +162,9 @@ namespace KRS_Academy
             Session["Result"] = result;
 
             int correctCharCount = 0;
-            for (int i = 0; i < Math.Min(paragraph1.Length, paragraph2.Length); i++)
+            for (int i = 0; i < correctWords; i++)
             {
-                if (paragraph1[i] == paragraph2[i])
-                {
-                    correctCharCount++;
-                }
+                correctCharCount += originalWords[i].Length;
             }
 
             int marks = correctCharCount / 5;
