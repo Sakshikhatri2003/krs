@@ -18,28 +18,35 @@ namespace KRS_Academy.Student
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (SiteSession.IsExamStart)
             {
-                if (!string.IsNullOrEmpty(Request.QueryString["Id"]))
+                if (!IsPostBack)
                 {
-                    int id = Convert.ToInt32(Request.QueryString["Id"]);
-                    string query = "SELECT TestName, InputText FROM TypingMaster WHERE TypingId = @Id";
-
-                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    if (!string.IsNullOrEmpty(Request.QueryString["Id"]))
                     {
-                        SqlCommand command = new SqlCommand(query, connection);
-                        command.Parameters.AddWithValue("@Id", id);
+                        int id = Convert.ToInt32(Request.QueryString["Id"]);
+                        string query = "SELECT TestName, InputText FROM TypingMaster WHERE TypingId = @Id";
 
-                        connection.Open();
-                        SqlDataReader reader = command.ExecuteReader();
-                        if (reader.Read())
+                        using (SqlConnection connection = new SqlConnection(connectionString))
                         {
-                            input.Text = reader["InputText"].ToString();
-                            TestName.Text = reader["TestName"].ToString();
+                            SqlCommand command = new SqlCommand(query, connection);
+                            command.Parameters.AddWithValue("@Id", id);
+
+                            connection.Open();
+                            SqlDataReader reader = command.ExecuteReader();
+                            if (reader.Read())
+                            {
+                                input.Text = reader["InputText"].ToString();
+                                TestName.Text = reader["TestName"].ToString();
+                            }
                         }
                     }
+                    count.Enabled = false;
                 }
-                count.Enabled = false;
+            }
+            else
+            {
+                Response.Redirect("HindiTyping.aspx", false);
             }
         }
 
