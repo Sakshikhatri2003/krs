@@ -192,7 +192,7 @@
 
             function updateCurrentWordsCount() {
                 const text = document.getElementById('<%=input_text.ClientID%>').value.trim();
-                const currentWords = countAllCharacters(text) / 5;
+                const currentWords = countAllCharacters(text);
                 document.getElementById('currentWords').textContent = currentWords.toFixed(0);
             }
 
@@ -200,7 +200,7 @@
                 var sentenceElement = document.getElementById('<%=input.ClientID%>');
                 var totalWordsElement = document.getElementById('totalWords');
                 var text = sentenceElement.textContent.trim();
-                totalWords = countAllCharacters(text) / 5;
+                totalWords = countAllCharacters(text);
                 totalWordsElement.textContent = totalWords.toFixed(0);
             }
             function countAllCharacters(text) {

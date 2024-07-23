@@ -69,6 +69,10 @@ namespace KRS_Academy.Student
                 {
                     Marks.Text = Session["Marks"].ToString();
                 }
+                if (Session["TotalMarks"] != null)
+                {
+                    TotalMarks.Text = Session["TotalMarks"].ToString();
+                }
 
                 if (!string.IsNullOrEmpty(Request.QueryString["Id"]))
                 {
@@ -125,6 +129,8 @@ namespace KRS_Academy.Student
                         Accuracy.Text = reader["Accuracy"].ToString() + "%";
                         LblResult.InnerHtml = reader["Result_text"].ToString();
                         Marks.Text = reader["Marks"].ToString();
+                        int totalMarks = Convert.ToInt32(reader["TotalWords"]) / 5;
+                        TotalMarks.Text = Convert.ToInt32(totalMarks).ToString();
                     }
                     reader.Close();
                 }

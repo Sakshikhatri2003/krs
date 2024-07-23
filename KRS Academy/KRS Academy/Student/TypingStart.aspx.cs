@@ -160,6 +160,7 @@ namespace KRS_Academy
             Session["WrongWords"] = wrongWords;
             Session["Input"] = input.Text;
             Session["Result"] = result;
+            Session["TotalMarks"] = wordCount / 5;
 
             int correctCharCount = 0;
             for (int i = 0; i < correctWords; i++)

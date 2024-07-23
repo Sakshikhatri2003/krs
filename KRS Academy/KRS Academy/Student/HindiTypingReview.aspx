@@ -255,7 +255,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </div>
                                     <div class="col option">
                                         <img src="images/check.png" alt="Correct" width="20" height="20">Marks : 
-                      &nbsp;<asp:Label ID="Marks" runat="server"></asp:Label>
+                      &nbsp;<asp:Label ID="Marks" runat="server"></asp:Label>/<asp:Label ID="TotalMarks" runat="server"></asp:Label>
                                     </div>
                                     <div class="col option"></div>
                                     <div class="col option"></div>

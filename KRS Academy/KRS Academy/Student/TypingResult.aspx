@@ -31,7 +31,11 @@
                     <h5 class="card-title">Typing Tests</h5>
                 </div>
             </nav>
-
+            <div col-md="4">
+                &nbsp;<label>Student Name - Mobile No.</label>
+                <asp:DropDownList ID="NameFilter" runat="server" style="width:40%;" CssClass="form-control" OnSelectedIndexChanged="NameFilter_SelectedIndexChanged" AutoPostBack="true">
+                </asp:DropDownList>
+            </div>
             <asp:HiddenField ID="hfTypingId" runat="server" />
             <div class="scroll">
                 <asp:GridView ID="example1" runat="server" class="table table-striped table-bordered table-hover my-2" Style="border-radius: 10px;" AutoGenerateColumns="false" OnRowCommand="example1_RowCommand" DataKeyNames="Test_id">
@@ -77,27 +81,5 @@
                 </asp:GridView>
             </div>
         </div>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                var table = $('#<%= example1.ClientID %>').DataTable({
-                    "responsive": true,
-                    "lengthChange": false,
-                    "autoWidth": false,
-                    "scrollY": "400px",
-                    "scrollCollapse": true,
-                    "paging": true,
-                    "pageLength": 10,
-                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-                });
-
-                table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            });
-
-            function filterTable() {
-                var table = $('#<%= example1.ClientID %>').DataTable();
-                table.search($('#txtSearch').val()).draw();
-            }
-        </script>
-
     </form>
 </asp:Content>

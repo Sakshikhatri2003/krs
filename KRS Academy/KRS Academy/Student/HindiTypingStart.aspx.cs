@@ -160,6 +160,7 @@ namespace KRS_Academy.Student
             Session["WrongWords"] = wrongWords;
             Session["Input"] = input.Text;
             Session["Result"] = result;
+            Session["TotalMarks"] = wordCount / 5;
 
             int correctCharCount = 0;
             for (int i = 0; i < correctWords; i++)
@@ -196,6 +197,7 @@ namespace KRS_Academy.Student
                         conn.Open();
                         cmd.ExecuteNonQuery();
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "toastrSuccess", "toastr.success('Data inserted successfully.');", true);
+                        Response.Redirect("HindiTypingReview.aspx");
                     }
                     catch (Exception ex)
                     {
@@ -203,8 +205,6 @@ namespace KRS_Academy.Student
                     }
                 }
             }
-
-            Response.Redirect("HindiTypingReview.aspx");
         }
 
         static string[] SplitHindiText(string text)
