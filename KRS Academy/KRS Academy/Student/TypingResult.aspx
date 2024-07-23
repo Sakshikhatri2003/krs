@@ -32,8 +32,8 @@
                 </div>
             </nav>
             <div col-md="4">
-                &nbsp;<label>Student Name - Mobile No.</label>
-                <asp:DropDownList ID="NameFilter" runat="server" style="width:40%;" CssClass="form-control" OnSelectedIndexChanged="NameFilter_SelectedIndexChanged" AutoPostBack="true">
+                &nbsp;<label>Student Name - Mobile No.</label><br />
+                <asp:DropDownList ID="NameFilter" runat="server" style="width:40%; height:100%;" CssClass="form-control select2" OnSelectedIndexChanged="NameFilter_SelectedIndexChanged" AutoPostBack="true">
                 </asp:DropDownList>
             </div>
             <asp:HiddenField ID="hfTypingId" runat="server" />
@@ -81,5 +81,10 @@
                 </asp:GridView>
             </div>
         </div>
+        <script>
+            $(function () {
+                $('.select2').select2()
+            });
+        </script>
     </form>
 </asp:Content>
