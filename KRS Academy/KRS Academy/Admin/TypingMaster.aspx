@@ -41,7 +41,7 @@
                                         <div class="form-group">
                                             <label for="noticeContent">Input Text</label>
                                             <asp:TextBox class="form-control" runat="server" ID="Content" AutoPostBack="true" TextMode="MultiLine" OnTextChanged="Content_TextChanged" placeholder="Enter content" Visible="true"></asp:TextBox>
-                                            <asp:TextBox class="form-control hindi-font" runat="server" ID="HindiContent1" AutoPostBack="true" TextMode="MultiLine" OnTextChanged="HindiContent1_TextChanged" placeholder="Enter content" Visible="false"></asp:TextBox>
+                                            <asp:TextBox class="form-control hindi-font" runat="server" ID="HindiContent1" AutoPostBack="true" TextMode="MultiLine" OnTextChanged="HindiContent1_TextChanged" placeholder="यहां लिखें" Visible="false"></asp:TextBox>
 
                                         </div>
                                     </div>

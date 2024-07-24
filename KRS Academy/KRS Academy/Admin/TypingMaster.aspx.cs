@@ -91,8 +91,19 @@ namespace KRS_Academy.Admin
                     {
                         Date.Text = reader["Date"].ToString();
                         languageDrp.SelectedValue = reader["LanguageCode"].ToString();
+                        if(reader["LanguageCode"].ToString() == "1")
+                        {
+                            Content.Visible = false;
+                            HindiContent1.Visible = true;
+                            HindiContent1.Text = reader["InputText"].ToString();
+                        }
+                        else
+                        {
+                            Content.Visible = true;
+                            HindiContent1.Visible = false;
+                            Content.Text = reader["InputText"].ToString();
+                        }
                         testName.Text = reader["TestName"].ToString();
-                        Content.Text = reader["InputText"].ToString();
                         WordsNo.Text = reader["TotalWords"].ToString();
                         submit.Visible = false;
                         update.Visible = true;
